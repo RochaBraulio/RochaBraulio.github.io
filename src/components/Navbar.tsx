@@ -40,9 +40,6 @@ export function Navbar({ onSearch }: NavbarProps) {
                 <Link to="/" className="text-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
                   Home
                 </Link>
-                <Link to="/analytics" className="text-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
-                  Analytics
-                </Link>
                 <Link to="/about" className="text-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
                   About
                 </Link>
@@ -58,9 +55,6 @@ export function Navbar({ onSearch }: NavbarProps) {
             <nav className="flex items-center gap-6 text-sm">
               <Link to="/" className="text-foreground hover:text-primary transition-colors">
                 Home
-              </Link>
-              <Link to="/analytics" className="text-foreground hover:text-primary transition-colors">
-                Analytics
               </Link>
               <Link to="/about" className="text-foreground hover:text-primary transition-colors">
                 About

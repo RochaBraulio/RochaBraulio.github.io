@@ -1,4 +1,3 @@
-
 export interface BlogPost {
   id: string;
   title: string;
@@ -379,28 +378,4 @@ export const trackPageView = (postId: string): void => {
   if (post) {
     post.views += 1;
   }
-};
-
-// Simple analytics data for demo purposes
-export const getAnalyticsData = () => {
-  const totalViews = blogPosts.reduce((sum, post) => sum + post.views, 0);
-  const postsByPopularity = [...blogPosts].sort((a, b) => b.views - a.views);
-  const viewsByTag = new Map<string, number>();
-  
-  blogPosts.forEach(post => {
-    post.tags.forEach(tag => {
-      viewsByTag.set(tag, (viewsByTag.get(tag) || 0) + post.views);
-    });
-  });
-  
-  const tagData = Array.from(viewsByTag.entries())
-    .map(([name, views]) => ({ name, views }))
-    .sort((a, b) => b.views - a.views);
-  
-  return {
-    totalViews,
-    postsByPopularity,
-    tagData,
-    dailyViews: [65, 72, 86, 95, 110, 108, 120], // Sample data for the last 7 days
-  };
 };
