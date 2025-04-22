@@ -18,7 +18,12 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ language, value }) => {
     <div className="relative group">
       <button
         onClick={handleCopyCode}
-        className="absolute right-2 top-2 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity bg-muted/50 hover:bg-muted"
+        className="absolute right-2 top-2 p-2 rounded-lg opacity-0 group-hover:opacity-100 
+                   transition-all duration-300 
+                   bg-gray-200 dark:bg-muted/50 
+                   hover:bg-gray-300 dark:hover:bg-muted 
+                   border border-gray-300 dark:border-transparent 
+                   text-gray-700 dark:text-white"
         aria-label="Copy code"
       >
         <Copy className="h-4 w-4" />
