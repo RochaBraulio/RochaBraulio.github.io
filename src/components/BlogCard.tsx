@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { BlogPost } from "@/utils/blogData";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -51,12 +52,14 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
           </CardFooter>
         </div>
 
-        <div className={`${featured ? 'md:w-[400px]' : 'md:w-[300px]'} h-[200px] md:h-auto relative overflow-hidden rounded-xl order-first md:order-last`}>
-          <img 
-            src={coverImage} 
-            alt={title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+        <div className={`${featured ? 'md:w-[400px]' : 'md:w-[300px]'} shrink-0 order-first md:order-last`}>
+          <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-xl">
+            <img 
+              src={coverImage} 
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          </AspectRatio>
         </div>
       </div>
     </Card>
