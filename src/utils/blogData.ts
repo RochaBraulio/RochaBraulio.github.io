@@ -1,3 +1,5 @@
+import { getCloudinaryUrl } from "./cloudinary";
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -78,7 +80,7 @@ Tools like Tableau, Power BI, or libraries like Matplotlib and Seaborn help you 
 
 Remember, the field of data analytics is broad. Start with the basics and then specialize based on your interests and career goals.
     `,
-    coverImage: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+    coverImage: getCloudinaryUrl("your-folder/your-image.jpg", { width: 800, quality: "auto", format: "auto" }),
     tags: ["Data Analytics", "Python", "Beginners"],
     views: 1205
   },
