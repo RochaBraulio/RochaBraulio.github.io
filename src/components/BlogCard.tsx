@@ -30,7 +30,10 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
       <div className={`${featured ? 'md:w-1/3 md:pl-8' : ''} flex flex-col pt-6`}>
         <CardHeader className="p-0 space-y-4">
           <div className="space-y-2">
-            <Link to={`/post/${id}`} className="group-hover:text-primary transition-colors">
+            <Link 
+              to={`/post/${id}`} 
+              className="group-hover:text-[#007AFF] transition-colors"
+            >
               <h3 className={`font-medium tracking-tight ${featured ? 'text-3xl md:text-4xl' : 'text-2xl'}`}>{title}</h3>
             </Link>
             <p className="text-muted-foreground text-sm font-light">
