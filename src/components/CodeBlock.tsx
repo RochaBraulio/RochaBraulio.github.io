@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { xcode } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Copy } from 'lucide-react';
-import { vsCodeLightTheme, vsCodeDarkTheme } from '@/utils/syntaxHighlightThemes';
 
 interface CodeBlockProps {
   language: string;
@@ -31,7 +31,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ language, value }) => {
       </button>
       <SyntaxHighlighter
         language={language}
-        style={document.documentElement.classList.contains('dark') ? vsCodeDarkTheme : vsCodeLightTheme}
+        style={xcode}
         PreTag="div"
       >
         {value.replace(/\n$/, '')}
