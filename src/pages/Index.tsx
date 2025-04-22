@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
@@ -8,9 +7,12 @@ import { blogPosts, getCategories } from "@/utils/blogData";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+const POSTS_PER_PAGE = 5;
+
 const Index = () => {
   const [filterTag, setFilterTag] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"date" | "popularity">("date");
+  const [showAllPosts, setShowAllPosts] = useState(false);
   const categories = getCategories();
   
   const { searchQuery, setSearchQuery, searchResults } = useSearch(blogPosts);
@@ -25,6 +27,8 @@ const Index = () => {
     }
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
+
+  const displayedPosts = showAllPosts ? sortedPosts : sortedPosts.slice(0, POSTS_PER_PAGE);
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -103,16 +107,30 @@ const Index = () => {
                 : "All Posts"}
           </h2>
           
-          {sortedPosts.length === 0 ? (
+          {displayedPosts.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">No posts found. Try a different search term or category.</p>
             </div>
           ) : (
-            <div className="space-y-8">
-              {sortedPosts.map(post => (
-                <BlogCard key={post.id} post={post} />
-              ))}
-            </div>
+            <>
+              <div className="space-y-8">
+                {displayedPosts.map(post => (
+                  <BlogCard key={post.id} post={post} />
+                ))}
+              </div>
+              
+              {!showAllPosts && sortedPosts.length > POSTS_PER_PAGE && (
+                <div className="mt-8 text-center">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setShowAllPosts(true)}
+                    className="min-w-[200px]"
+                  >
+                    Read More
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
