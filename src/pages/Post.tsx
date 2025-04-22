@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -93,9 +92,9 @@ const Post = () => {
           <div className="blog-content">
             <ReactMarkdown
               components={{
-                code({ node, inline, className, children, ...props }) {
+                code: ({ className, children, ...props }) => {
                   const match = /language-(\w+)/.exec(className || '');
-                  return !inline && match ? (
+                  return match ? (
                     <SyntaxHighlighter
                       language={match[1]}
                       style={vscDarkPlus}
