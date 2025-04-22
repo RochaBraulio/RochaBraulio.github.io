@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
@@ -19,7 +18,6 @@ const Index = () => {
     ? searchResults.filter(post => post.tags.includes(filterTag))
     : searchResults;
 
-  // Sort posts based on selected criteria
   const sortedPosts = [...filteredPosts].sort((a, b) => {
     if (sortBy === "popularity") {
       return b.views - a.views;
@@ -43,7 +41,7 @@ const Index = () => {
 
   return (
     <Layout onSearch={handleSearch}>
-      <section className="py-12 md:py-24 bg-gradient-to-b from-primary/10 to-background">
+      <section className="py-12 md:py-24 bg-[#FCFBF8]">
         <div className="container flex flex-col items-center text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
             Data Analytics & 3D Printing Blog
@@ -122,4 +120,3 @@ const Index = () => {
 };
 
 export default Index;
-
