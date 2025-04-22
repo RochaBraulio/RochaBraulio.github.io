@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { useSearch } from "@/hooks/useSearch";
-import { blogPosts, getPostById, trackPageView } from "@/utils/blogData";
+import { blogPosts, getPostById } from "@/utils/blogData";
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { ShareButtons } from "@/components/ShareButtons";
+import { Comments } from "@/components/Comments";
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -113,6 +115,17 @@ const Post = () => {
             >
               {content}
             </ReactMarkdown>
+          </div>
+
+          {/* Share Buttons */}
+          <div className="mt-8 border-t pt-6">
+            <h3 className="text-lg font-semibold mb-4">Share this post</h3>
+            <ShareButtons url={window.location.href} title={title} />
+          </div>
+
+          {/* Comments Section */}
+          <div className="mt-12 border-t pt-6">
+            <Comments />
           </div>
         </div>
       </article>
