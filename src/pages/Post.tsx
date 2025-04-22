@@ -1,3 +1,184 @@
+import React from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+
+const vsCodeLightTheme = {
+  'code[class*="language-"]': {
+    color: '#000000',
+    background: '#f5f5f5',
+    textShadow: '0 1px white',
+    fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
+    fontSize: '1em',
+    textAlign: 'left',
+    whiteSpace: 'pre',
+    wordSpacing: 'normal',
+    wordBreak: 'normal',
+    wordWrap: 'normal',
+    lineHeight: '1.5',
+    MozTabSize: '4',
+    OTabSize: '4',
+    tabSize: '4',
+    WebkitHyphens: 'none',
+    MozHyphens: 'none',
+    msHyphens: 'none',
+    hyphens: 'none',
+  },
+  'pre[class*="language-"]': {
+    color: '#000000',
+    background: '#f5f5f5',
+    textShadow: '0 1px white',
+    fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
+    fontSize: '1em',
+    textAlign: 'left',
+    whiteSpace: 'pre',
+    wordSpacing: 'normal',
+    wordBreak: 'normal',
+    wordWrap: 'normal',
+    lineHeight: '1.5',
+    MozTabSize: '4',
+    OTabSize: '4',
+    tabSize: '4',
+    WebkitHyphens: 'none',
+    MozHyphens: 'none',
+    msHyphens: 'none',
+    hyphens: 'none',
+    padding: '1em',
+    margin: '.5em 0',
+    overflow: 'auto',
+  },
+  'pre code': {
+    background: 'none',
+    fontSize: '1em',
+  },
+  ':not(pre) > code[class*="language-"]': {
+    background: '#f5f5f5',
+    padding: '.1em',
+    borderRadius: '.3em',
+    whiteSpace: 'normal',
+  },
+  'comment': { color: '#008000' },
+  'prolog': { color: '#008000' },
+  'doctype': { color: '#008000' },
+  'cdata': { color: '#008000' },
+  'punctuation': { color: '#393A34' },
+  'namespace': { opacity: '.7' },
+  'property': { color: '#36acaa' },
+  'tag': { color: '#0000ff' },
+  'boolean': { color: '#0000ff' },
+  'number': { color: '#098658' },
+  'constant': { color: '#36acaa' },
+  'symbol': { color: '#36acaa' },
+  'selector': { color: '#0000ff' },
+  'attr-name': { color: '#0451a5' },
+  'string': { color: '#a31515' },
+  'char': { color: '#36acaa' },
+  'builtin': { color: '#0000ff' },
+  'inserted': { color: '#22863a', backgroundColor: '#f0fff4' },
+  'operator': { color: '#393A34' },
+  'entity': {
+    cursor: 'help',
+    backgroundColor: '#00000010',
+  },
+  'url': {
+    color: '#36acaa',
+  },
+  '.language-css .token.string': {
+    color: '#0000ff',
+  },
+  '.style .token.string': {
+    color: '#0000ff',
+  },
+  'keyword': { color: '#0000ff' }
+};
+
+const vsCodeDarkTheme = {
+  'code[class*="language-"]': {
+    color: '#D4D4D4',
+    background: '#1E1E1E',
+    textShadow: 'none',
+    fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
+    fontSize: '1em',
+    textAlign: 'left',
+    whiteSpace: 'pre',
+    wordSpacing: 'normal',
+    wordBreak: 'normal',
+    wordWrap: 'normal',
+    lineHeight: '1.5',
+    MozTabSize: '4',
+    OTabSize: '4',
+    tabSize: '4',
+    WebkitHyphens: 'none',
+    MozHyphens: 'none',
+    msHyphens: 'none',
+    hyphens: 'none',
+  },
+  'pre[class*="language-"]': {
+    color: '#D4D4D4',
+    background: '#1E1E1E',
+    textShadow: 'none',
+    fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
+    fontSize: '1em',
+    textAlign: 'left',
+    whiteSpace: 'pre',
+    wordSpacing: 'normal',
+    wordBreak: 'normal',
+    wordWrap: 'normal',
+    lineHeight: '1.5',
+    MozTabSize: '4',
+    OTabSize: '4',
+    tabSize: '4',
+    WebkitHyphens: 'none',
+    MozHyphens: 'none',
+    msHyphens: 'none',
+    hyphens: 'none',
+    padding: '1em',
+    margin: '.5em 0',
+    overflow: 'auto',
+  },
+  'pre code': {
+    background: 'none',
+    fontSize: '1em',
+  },
+  ':not(pre) > code[class*="language-"]': {
+    background: '#1E1E1E',
+    padding: '.1em',
+    borderRadius: '.3em',
+    whiteSpace: 'normal',
+  },
+  'comment': { color: '#6A9955' },
+  'prolog': { color: '#6A9955' },
+  'doctype': { color: '#6A9955' },
+  'cdata': { color: '#6A9955' },
+  'punctuation': { color: '#D4D4D4' },
+  'namespace': { opacity: '.7' },
+  'property': { color: '#9CDCFE' },
+  'tag': { color: '#569CD6' },
+  'boolean': { color: '#569CD6' },
+  'number': { color: '#B5CEA8' },
+  'constant': { color: '#9CDCFE' },
+  'symbol': { color: '#9CDCFE' },
+  'selector': { color: '#569CD6' },
+  'attr-name': { color: '#9CDCFE' },
+  'string': { color: '#CE9178' },
+  'char': { color: '#9CDCFE' },
+  'builtin': { color: '#569CD6' },
+  'inserted': { color: '#B5CEA8', backgroundColor: '#144212' },
+  'operator': { color: '#D4D4D4' },
+  'entity': {
+    cursor: 'help',
+    backgroundColor: '#00000010',
+  },
+  'url': {
+    color: '#9CDCFE',
+  },
+  '.language-css .token.string': {
+    color: '#569CD6',
+  },
+  '.style .token.string': {
+    color: '#569CD6',
+  },
+  'keyword': { color: '#569CD6' }
+};
+
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -103,12 +284,10 @@ const Post = () => {
                 code: ({ className, children, ...props }) => {
                   const match = /language-(\w+)/.exec(className || '');
                   
-                  // Check if this is an STL viewer block
                   if (match && match[1] === 'stl') {
                     return <StlViewer url={String(children).trim()} />;
                   }
                   
-                  // Check if this is a matplotlib block
                   if (match && match[1] === 'python' && String(children).includes('plt.')) {
                     return <PyPlot code={String(children).trim()} />;
                   }
@@ -116,7 +295,7 @@ const Post = () => {
                   return match ? (
                     <SyntaxHighlighter
                       language={match[1]}
-                      style={vscDarkPlus}
+                      style={document.documentElement.classList.contains('dark') ? vsCodeDarkTheme : vsCodeLightTheme}
                       PreTag="div"
                       {...props}
                     >
