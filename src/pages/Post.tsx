@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { PrismLight as SyntaxHighlighterLight } from 'react-syntax-highlighter';
+import { Copy } from 'lucide-react';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import gcode from 'react-syntax-highlighter/dist/esm/languages/prism/gcode';
 
@@ -15,10 +15,8 @@ import { Comments } from "@/components/Comments";
 import { StlViewer } from "@/components/StlViewer";
 import { PyPlot } from "@/components/PyPlot";
 
-// Register language for GCode syntax highlighting
 SyntaxHighlighterLight.registerLanguage('gcode', gcode);
 
-// VS Code Light Theme
 const vsCodeLightTheme = {
   'code[class*="language-"]': {
     color: '#000000',
@@ -110,7 +108,6 @@ const vsCodeLightTheme = {
   'keyword': { color: '#0000ff' }
 };
 
-// VS Code Dark Theme
 const vsCodeDarkTheme = {
   'code[class*="language-"]': {
     color: '#D4D4D4',
@@ -207,6 +204,10 @@ const Post = () => {
   
   const post = id ? getPostById(id) : undefined;
   
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+  };
+  
   useEffect(() => {
     if (id && post) {
       console.log(`Viewed post: ${id}`);
@@ -294,14 +295,23 @@ const Post = () => {
                   }
                   
                   return match ? (
-                    <SyntaxHighlighter
-                      language={match[1]}
-                      style={document.documentElement.classList.contains('dark') ? vsCodeDarkTheme : vsCodeLightTheme}
-                      PreTag="div"
-                      {...props}
-                    >
-                      {String(children).replace(/\n$/, '')}
-                    </SyntaxHighlighter>
+                    <div className="relative group">
+                      <button
+                        onClick={() => handleCopyCode(String(children))}
+                        className="absolute right-2 top-2 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity bg-muted/50 hover:bg-muted"
+                        aria-label="Copy code"
+                      >
+                        <Copy className="h-4 w-4" />
+                      </button>
+                      <SyntaxHighlighter
+                        language={match[1]}
+                        style={document.documentElement.classList.contains('dark') ? vsCodeDarkTheme : vsCodeLightTheme}
+                        PreTag="div"
+                        {...props}
+                      >
+                        {String(children).replace(/\n$/, '')}
+                      </SyntaxHighlighter>
+                    </div>
                   ) : (
                     <code className={className} {...props}>
                       {children}
