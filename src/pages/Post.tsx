@@ -11,6 +11,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ShareButtons } from "@/components/ShareButtons";
 import { Comments } from "@/components/Comments";
 import { StlViewer } from "@/components/StlViewer";
+import { PyPlot } from "@/components/PyPlot";
 
 // Register language for GCode syntax highlighting
 import { PrismLight as SyntaxHighlighterLight } from 'react-syntax-highlighter';
@@ -106,6 +107,11 @@ const Post = () => {
                   // Check if this is an STL viewer block
                   if (match && match[1] === 'stl') {
                     return <StlViewer url={String(children).trim()} />;
+                  }
+                  
+                  // Check if this is a matplotlib block
+                  if (match && match[1] === 'python' && String(children).includes('plt.')) {
+                    return <PyPlot code={String(children).trim()} />;
                   }
                   
                   return match ? (
