@@ -18,7 +18,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
   });
 
   return (
-    <Card className={`group overflow-hidden border-none shadow-none transition-all duration-500 hover:scale-[1.01] ${featured ? 'md:h-[400px]' : ''}`}>
+    <Card className={`group overflow-hidden border-none shadow-none bg-transparent transition-all duration-500 hover:scale-[1.01] ${featured ? 'md:h-[400px]' : ''}`}>
       <div className="flex flex-col md:flex-row gap-6 md:gap-8">
         <div className="flex flex-col flex-grow space-y-4">
           <CardHeader className="p-0 space-y-4">
