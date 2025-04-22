@@ -22,7 +22,7 @@ PrismLight.registerLanguage('gcode', gcode);
 const vsCodeLightTheme = {
   'code[class*="language-"]': {
     color: '#222222',
-    background: '#f3f6f6',
+    background: 'transparent',
     textShadow: 'none',
     fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
     fontSize: '0.9em',
@@ -76,7 +76,7 @@ const vsCodeLightTheme = {
 const vsCodeDarkTheme = {
   'code[class*="language-"]': {
     color: '#D4D4D4',
-    background: '#1E1E1E',
+    background: 'transparent',
     textShadow: 'none',
     fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
     fontSize: '1em',
