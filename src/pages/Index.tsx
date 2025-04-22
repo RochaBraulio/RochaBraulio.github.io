@@ -112,15 +112,13 @@ const Index = () => {
               <p className="text-muted-foreground">No posts found. Try a different search term or category.</p>
             </div>
           ) : (
-            <>
-              <div className="space-y-8">
-                {displayedPosts.map(post => (
-                  <BlogCard key={post.id} post={post} />
-                ))}
-              </div>
+            <div className="space-y-8">
+              {displayedPosts.map(post => (
+                <BlogCard key={post.id} post={post} />
+              ))}
               
               {!showAllPosts && sortedPosts.length > POSTS_PER_PAGE && (
-                <div className="mt-8 text-center">
+                <div className="mt-4 ml-0 md:ml-[calc(33.333%-2rem)]">
                   <Button 
                     variant="outline" 
                     onClick={() => setShowAllPosts(true)}
@@ -130,7 +128,7 @@ const Index = () => {
                   </Button>
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
       </section>
