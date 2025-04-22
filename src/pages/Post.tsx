@@ -22,7 +22,7 @@ SyntaxHighlighterLight.registerLanguage('gcode', gcode);
 const vsCodeLightTheme = {
   'code[class*="language-"]': {
     color: '#000000',
-    background: '#f5f5f5',
+    background: '#F1F0FB',
     textShadow: '0 1px white',
     fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
     fontSize: '1em',
@@ -42,7 +42,7 @@ const vsCodeLightTheme = {
   },
   'pre[class*="language-"]': {
     color: '#000000',
-    background: '#f5f5f5',
+    background: '#F1F0FB',
     textShadow: '0 1px white',
     fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
     fontSize: '1em',
@@ -62,13 +62,15 @@ const vsCodeLightTheme = {
     padding: '1em',
     margin: '.5em 0',
     overflow: 'auto',
+    borderRadius: '0.5rem',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
   },
   'pre code': {
     background: 'none',
     fontSize: '1em',
   },
   ':not(pre) > code[class*="language-"]': {
-    background: '#f5f5f5',
+    background: '#F1F0FB',
     padding: '.1em',
     borderRadius: '.3em',
     whiteSpace: 'normal',
