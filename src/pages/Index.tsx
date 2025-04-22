@@ -49,37 +49,16 @@ const Index = () => {
       <section className="py-12 md:py-24 bg-[#FCFBF8] dark:bg-[#0A0A0A]">
         <div className="container">
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            <div className="w-full md:w-1/3 relative">
+            <div className="w-full md:w-1/3 flex justify-center items-center">
               <img
-                src="/lovable-uploads/b597b30b-d608-41e5-bb69-d3a314382c36.png"
+                src="/lovable-uploads/a2210c36-42de-4433-9699-24246cd7a8a0.png"
                 alt="Tree with bench illustration"
-                className="
-                  w-full h-auto
-                  rounded-xl
-                  shadow-2xl
-                  bg-white/40 
-                  dark:bg-[#181A1B]/70
-                  backdrop-blur-md
-                  dark:backdrop-blur-xl
-                  transition-all duration-300
-                  border border-white/40
-                  dark:border-white/10
-                  mix-blend-luminosity
-                  dark:mix-blend-screen
-                "
+                className="w-full h-auto"
                 style={{
-                  filter:
-                    "drop-shadow(0 8px 32px rgba(0,0,0,0.12)) blur(0.25px)",
+                  display: "block",
                   background: "transparent",
                 }}
               />
-              <div className="
-                pointer-events-none
-                absolute inset-0 rounded-xl
-                bg-gradient-to-t from-white/0 via-white/10 to-white/0
-                dark:bg-gradient-to-t dark:from-[#181A1B]/60 dark:via-[#0A0A0A]/50 dark:to-transparent
-                z-10
-              " />
             </div>
             <div className="w-full md:w-2/3 text-center md:text-left">
               <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
