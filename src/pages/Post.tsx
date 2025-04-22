@@ -1,6 +1,24 @@
-import React from 'react';
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighterLight } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import gcode from 'react-syntax-highlighter/dist/esm/languages/prism/gcode';
 
+import { Layout } from "@/components/Layout";
+import { useSearch } from "@/hooks/useSearch";
+import { blogPosts, getPostById, trackPageView } from "@/utils/blogData";
+import { Badge } from "@/components/ui/badge";
+import { ShareButtons } from "@/components/ShareButtons";
+import { Comments } from "@/components/Comments";
+import { StlViewer } from "@/components/StlViewer";
+import { PyPlot } from "@/components/PyPlot";
+
+// Register language for GCode syntax highlighting
+SyntaxHighlighterLight.registerLanguage('gcode', gcode);
+
+// VS Code Light Theme
 const vsCodeLightTheme = {
   'code[class*="language-"]': {
     color: '#000000',
@@ -90,6 +108,7 @@ const vsCodeLightTheme = {
   'keyword': { color: '#0000ff' }
 };
 
+// VS Code Dark Theme
 const vsCodeDarkTheme = {
   'code[class*="language-"]': {
     color: '#D4D4D4',
@@ -178,26 +197,6 @@ const vsCodeDarkTheme = {
   },
   'keyword': { color: '#569CD6' }
 };
-
-import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Layout } from "@/components/Layout";
-import { useSearch } from "@/hooks/useSearch";
-import { blogPosts, getPostById, trackPageView } from "@/utils/blogData";
-import { Badge } from "@/components/ui/badge";
-import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ShareButtons } from "@/components/ShareButtons";
-import { Comments } from "@/components/Comments";
-import { StlViewer } from "@/components/StlViewer";
-import { PyPlot } from "@/components/PyPlot";
-
-// Register language for GCode syntax highlighting
-import { PrismLight as SyntaxHighlighterLight } from 'react-syntax-highlighter';
-import gcode from 'react-syntax-highlighter/dist/esm/languages/prism/gcode';
-
-SyntaxHighlighterLight.registerLanguage('gcode', gcode);
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
