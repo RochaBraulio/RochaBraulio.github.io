@@ -49,26 +49,37 @@ const Index = () => {
       <section className="py-12 md:py-24 bg-[#FCFBF8] dark:bg-[#0A0A0A]">
         <div className="container">
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            <div className="w-full md:w-1/3">
+            <div className="w-full md:w-1/3 relative">
               <img
-                src="/lovable-uploads/ea6e8f60-b633-456d-a6a2-37c0eaafef00.png"
+                src="/lovable-uploads/b597b30b-d608-41e5-bb69-d3a314382c36.png"
                 alt="Tree with bench illustration"
                 className="
                   w-full h-auto
                   rounded-xl
-                  shadow-lg
-                  opacity-95
-                  mix-blend-multiply
-                  dark:opacity-90
-                  dark:mix-blend-screen
+                  shadow-2xl
+                  bg-white/40 
+                  dark:bg-[#181A1B]/70
+                  backdrop-blur-md
+                  dark:backdrop-blur-xl
                   transition-all duration-300
-                  bg-transparent
-                  "
+                  border border-white/40
+                  dark:border-white/10
+                  mix-blend-luminosity
+                  dark:mix-blend-screen
+                "
                 style={{
-                  filter: "drop-shadow(0 8px 24px rgba(34,34,34,0.14)) blur(0.5px)",
-                  background: "transparent"
+                  filter:
+                    "drop-shadow(0 8px 32px rgba(0,0,0,0.12)) blur(0.25px)",
+                  background: "transparent",
                 }}
               />
+              <div className="
+                pointer-events-none
+                absolute inset-0 rounded-xl
+                bg-gradient-to-t from-white/0 via-white/10 to-white/0
+                dark:bg-gradient-to-t dark:from-[#181A1B]/60 dark:via-[#0A0A0A]/50 dark:to-transparent
+                z-10
+              " />
             </div>
             <div className="w-full md:w-2/3 text-center md:text-left">
               <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
