@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
@@ -73,11 +72,10 @@ const Index = () => {
             </div>
             <div className="w-full md:w-2/3 text-center md:text-left">
               <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
-                Data Analytics & 3D Printing Blog
+                My Personal Blog
               </h1>
               <p className="text-muted-foreground text-lg md:text-xl max-w-[700px] mb-8">
-                Exploring the intersection of data science and 3D printing technology.
-                Tutorials, guides, and insights to help you master both worlds.
+                Sharing personal insights, thoughts, and experiences.
               </p>
             </div>
           </div>

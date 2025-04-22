@@ -27,8 +27,8 @@ export function Navbar({ onSearch }: NavbarProps) {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link to="/" className="font-bold text-xl flex items-center">
-            <span className="text-primary">Data3D</span>
-            <span className="text-foreground">Blog</span>
+            <span className="text-primary">My</span>
+            <span className="text-foreground">Personal Blog</span>
           </Link>
         </div>
 

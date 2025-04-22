@@ -9,9 +9,9 @@ export function Footer() {
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="font-bold text-lg mb-4">Data3DBlog</h3>
+            <h3 className="font-bold text-lg mb-4">My Personal Blog</h3>
             <p className="text-muted-foreground">
-              Exploring the intersection of data analytics and 3D printing technology.
+              Exploring personal insights and thoughts.
             </p>
           </div>
           
