@@ -11,8 +11,11 @@ const About = () => {
   };
 
   return (
-    <Layout onSearch={handleSearch}>
-      <div className="container py-12">
+    <Layout 
+      onSearch={handleSearch} 
+      className="bg-[#FCFBF8] dark:bg-[#0A0A0A]"
+    >
+      <div className="container py-12 bg-[#FCFBF8] dark:bg-[#0A0A0A]">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold tracking-tight mb-6">About This Blog</h1>
           
