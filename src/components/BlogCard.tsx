@@ -11,7 +11,7 @@ interface BlogCardProps {
 }
 
 export function BlogCard({ post, featured = false }: BlogCardProps) {
-  const { id, title, date, author, excerpt, tags, views, coverImage } = post;
+  const { id, title, date, excerpt, tags, views, coverImage } = post;
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -31,7 +31,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
                 <h3 className={`font-medium tracking-tight ${featured ? 'text-3xl md:text-4xl' : 'text-2xl'}`}>{title}</h3>
               </Link>
               <p className="text-muted-foreground text-sm font-light">
-                {formattedDate} · {author}
+                {formattedDate}
               </p>
             </div>
           </CardHeader>
