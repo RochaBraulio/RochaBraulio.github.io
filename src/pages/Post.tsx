@@ -33,14 +33,14 @@ const Post = () => {
   if (!post) {
     return (
       <Layout onSearch={handleSearch}>
-        <div className="container py-12 text-center">
-          <h1 className="text-3xl font-bold">Post Not Found</h1>
-          <p className="mt-4 text-muted-foreground">
+        <div className="container py-24 text-center">
+          <h1 className="text-4xl font-medium">Post Not Found</h1>
+          <p className="mt-6 text-muted-foreground font-light text-lg">
             The post you're looking for doesn't exist or has been removed.
           </p>
           <button 
             onClick={() => navigate('/')}
-            className="mt-8 inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+            className="mt-12 inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-medium text-primary-foreground transition-transform hover:scale-105"
           >
             Return to Home
           </button>
@@ -60,28 +60,26 @@ const Post = () => {
   return (
     <Layout onSearch={handleSearch}>
       <article className="animate-in">
-        {/* Cover Image */}
-        <div className="w-full h-72 md:h-96 relative">
+        <div className="w-full h-[80vh] relative">
           <img 
             src={coverImage} 
             alt={title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
         </div>
         
-        {/* Post Header */}
-        <div className="prose-container -mt-20 relative">
-          <div className="bg-card shadow-lg rounded-lg p-6 md:p-10">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{title}</h1>
-            <div className="flex flex-wrap items-center gap-2 mt-4 text-sm text-muted-foreground">
-              <span>By {author}</span>
-              <span>•</span>
+        <div className="prose-container -mt-40 relative">
+          <div className="space-y-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-foreground">{title}</h1>
+            <div className="flex flex-wrap items-center gap-3 text-base text-muted-foreground font-light">
+              <span>{author}</span>
+              <span>·</span>
               <span>{formattedDate}</span>
             </div>
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="flex flex-wrap gap-2 pt-2">
               {tags.map(tag => (
-                <Badge key={tag} variant="secondary">
+                <Badge key={tag} variant="secondary" className="rounded-full px-4 py-1 text-sm font-light">
                   {tag}
                 </Badge>
               ))}
@@ -89,9 +87,8 @@ const Post = () => {
           </div>
         </div>
         
-        {/* Post Content */}
-        <div className="prose-container py-8">
-          <div className="blog-content">
+        <div className="prose-container py-16">
+          <div className="blog-content font-light">
             <ReactMarkdown
               components={{
                 code: ({ className, children, ...props }) => {
@@ -117,14 +114,12 @@ const Post = () => {
             </ReactMarkdown>
           </div>
 
-          {/* Share Buttons */}
-          <div className="mt-8 border-t pt-6">
-            <h3 className="text-lg font-semibold mb-4">Share this post</h3>
+          <div className="mt-16 border-t pt-8">
+            <h3 className="text-xl font-medium mb-6">Share this post</h3>
             <ShareButtons url={window.location.href} title={title} />
           </div>
 
-          {/* Comments Section */}
-          <div className="mt-12 border-t pt-6">
+          <div className="mt-16 border-t pt-8">
             <Comments />
           </div>
         </div>
