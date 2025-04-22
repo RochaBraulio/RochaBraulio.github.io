@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SearchBar } from "./SearchBar";
@@ -20,7 +21,7 @@ export function Navbar({ onSearch }: NavbarProps) {
 
   return (
     <header 
-      className="sticky top-0 z-50 w-full border-b bg-[#FCFBF8] backdrop-blur 
+      className="sticky top-0 z-50 w-full bg-[#FCFBF8] backdrop-blur 
       supports-[backdrop-filter]:bg-[#FCFBF8]/60"
     >
       <div className="container flex h-16 items-center justify-between">

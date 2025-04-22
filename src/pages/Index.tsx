@@ -40,7 +40,7 @@ const Index = () => {
   };
 
   return (
-    <Layout onSearch={handleSearch}>
+    <Layout onSearch={handleSearch} className="bg-[#FCFBF8]">
       <section className="py-12 md:py-24 bg-[#FCFBF8]">
         <div className="container flex flex-col items-center text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
@@ -53,7 +53,7 @@ const Index = () => {
         </div>
       </section>
       
-      <section className="py-6">
+      <section className="py-6 bg-[#FCFBF8]">
         <div className="container max-w-6xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold tracking-tight">Categories</h2>
@@ -92,7 +92,7 @@ const Index = () => {
         </div>
       </section>
       
-      <section className="py-6">
+      <section className="py-6 bg-[#FCFBF8]">
         <div className="container max-w-6xl">
           <h2 className="text-2xl font-bold tracking-tight mb-6">
             {searchQuery 
