@@ -40,7 +40,7 @@ const Index = () => {
   };
 
   return (
-    <Layout onSearch={handleSearch} className="bg-[#FCFBF8]">
+    <Layout onSearch={handleSearch} className="bg-[#FCFBF8] dark:bg-[#0A0A0A]">
       <section className="py-12 md:py-24 bg-[#FCFBF8]">
         <div className="container flex flex-col items-center text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">

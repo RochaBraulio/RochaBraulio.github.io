@@ -1,11 +1,10 @@
-
 import { Link } from "react-router-dom";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="border-t py-8 mt-10 bg-[#FCFBF8]">
+    <footer className="border-t py-8 mt-10 bg-[#FCFBF8] dark:bg-[#0A0A0A]">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>

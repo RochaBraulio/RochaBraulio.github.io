@@ -21,8 +21,8 @@ export function Navbar({ onSearch }: NavbarProps) {
 
   return (
     <header 
-      className="sticky top-0 z-50 w-full bg-[#FCFBF8] backdrop-blur 
-      supports-[backdrop-filter]:bg-[#FCFBF8]/60"
+      className="sticky top-0 z-50 w-full bg-[#FCFBF8] dark:bg-[#0A0A0A] backdrop-blur 
+      supports-[backdrop-filter]:bg-[#FCFBF8]/60 dark:supports-[backdrop-filter]:bg-[#0A0A0A]/60"
     >
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
