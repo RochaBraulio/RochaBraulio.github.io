@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 
 export function Footer() {
@@ -52,7 +53,18 @@ export function Footer() {
         </div>
         
         <div className="mt-8 pt-4 border-t text-center text-sm text-muted-foreground">
-          <p>© {currentYear} Data3DBlog. All rights reserved.</p>
+          <p>
+            Created with{' '}
+            <a 
+              href="https://lovable.dev" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="underline hover:text-primary transition-colors"
+            >
+              Lovable
+            </a>
+            {' '}© {currentYear}
+          </p>
         </div>
       </div>
     </footer>
