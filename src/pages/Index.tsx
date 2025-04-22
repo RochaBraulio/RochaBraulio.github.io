@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
@@ -6,6 +7,7 @@ import { useSearch } from "@/hooks/useSearch";
 import { blogPosts, getCategories } from "@/utils/blogData";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTheme } from "@/hooks/useTheme"; // Import theme hook
 
 const POSTS_PER_PAGE = 5;
 
@@ -14,9 +16,10 @@ const Index = () => {
   const [sortBy, setSortBy] = useState<"date" | "popularity">("date");
   const [showAllPosts, setShowAllPosts] = useState(false);
   const categories = getCategories();
-  
+
   const { searchQuery, setSearchQuery, searchResults } = useSearch(blogPosts);
-  
+  const { theme } = useTheme(); // Use the hook
+
   const filteredPosts = filterTag
     ? searchResults.filter(post => post.tags.includes(filterTag))
     : searchResults;
@@ -29,12 +32,12 @@ const Index = () => {
   });
 
   const displayedPosts = showAllPosts ? sortedPosts : sortedPosts.slice(0, POSTS_PER_PAGE);
-  
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query) setFilterTag(null);
   };
-  
+
   const handleTagFilter = (tag: string) => {
     if (filterTag === tag) {
       setFilterTag(null);
@@ -51,12 +54,18 @@ const Index = () => {
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div className="w-full md:w-1/3 flex justify-center items-center">
               <img
-                src="/lovable-uploads/a2210c36-42de-4433-9699-24246cd7a8a0.png"
-                alt="Tree with bench illustration"
+                src={
+                  theme === "dark"
+                    ? "/lovable-uploads/4e16715f-e216-40d3-a875-bc8ff80e2c98.png"
+                    : "/lovable-uploads/a2210c36-42de-4433-9699-24246cd7a8a0.png"
+                }
+                alt="Park bench illustration"
                 className="w-full h-auto"
                 style={{
                   display: "block",
                   background: "transparent",
+                  border: "none",
+                  boxShadow: "none"
                 }}
               />
             </div>
@@ -110,17 +119,15 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
       <section className="py-6 bg-[#FCFBF8] dark:bg-[#0A0A0A]">
         <div className="container max-w-6xl">
           <h2 className="text-2xl font-bold tracking-tight mb-6">
             {searchQuery 
-              ? `Search Results for "${searchQuery}"` 
-              : filterTag 
-                ? `Posts in "${filterTag}"` 
+              ? `Search Results for "${searchQuery}"`
+              : filterTag
+                ? `Posts in "${filterTag}"`
                 : "All Posts"}
           </h2>
-          
           {displayedPosts.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">No posts found. Try a different search term or category.</p>
@@ -130,7 +137,6 @@ const Index = () => {
               {displayedPosts.map(post => (
                 <BlogCard key={post.id} post={post} />
               ))}
-              
               {!showAllPosts && sortedPosts.length > POSTS_PER_PAGE && (
                 <div className="mt-4 text-left">
                   <Button 
