@@ -18,10 +18,10 @@ const Post = () => {
   const post = id ? getPostById(id) : undefined;
   
   useEffect(() => {
-    if (id) {
-      trackPageView(id);
+    if (id && post) {
+      console.log(`Viewed post: ${id}`);
     }
-  }, [id]);
+  }, [id, post]);
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
