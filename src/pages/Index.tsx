@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
@@ -31,8 +32,6 @@ const Index = () => {
       setSearchQuery('');
     }
   };
-  
-  const featuredPost = popularPosts[0];
 
   return (
     <Layout onSearch={handleSearch}>
@@ -47,15 +46,6 @@ const Index = () => {
           </p>
         </div>
       </section>
-      
-      {featuredPost && !searchQuery && !filterTag && (
-        <section className="py-12">
-          <div className="container max-w-6xl">
-            <h2 className="text-2xl font-bold tracking-tight mb-6">Featured Post</h2>
-            <BlogCard post={featuredPost} featured />
-          </div>
-        </section>
-      )}
       
       <section className="py-6">
         <div className="container max-w-6xl">
