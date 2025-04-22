@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -42,8 +41,8 @@ const Post = () => {
   
   if (!post) {
     return (
-      <Layout onSearch={handleSearch}>
-        <div className="container py-24 text-center">
+      <Layout onSearch={handleSearch} className="bg-[#FCFBF8] dark:bg-[#0A0A0A]">
+        <div className="container py-24 text-center bg-[#FCFBF8] dark:bg-[#0A0A0A]">
           <h1 className="text-4xl font-medium">Post Not Found</h1>
           <p className="mt-6 text-muted-foreground font-light text-lg">
             The post you're looking for doesn't exist or has been removed.
@@ -68,8 +67,8 @@ const Post = () => {
   });
 
   return (
-    <Layout onSearch={handleSearch}>
-      <article className="animate-in">
+    <Layout onSearch={handleSearch} className="bg-[#FCFBF8] dark:bg-[#0A0A0A]">
+      <article className="animate-in bg-[#FCFBF8] dark:bg-[#0A0A0A]">
         <div className="w-full h-[80vh] relative">
           <img 
             src={coverImage} 
