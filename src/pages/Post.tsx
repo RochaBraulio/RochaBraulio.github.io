@@ -1,7 +1,9 @@
+
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight } from 'react-syntax-highlighter';
 import { Copy } from 'lucide-react';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import gcode from 'react-syntax-highlighter/dist/esm/languages/prism/gcode';
@@ -15,7 +17,8 @@ import { Comments } from "@/components/Comments";
 import { StlViewer } from "@/components/StlViewer";
 import { PyPlot } from "@/components/PyPlot";
 
-SyntaxHighlighterLight.registerLanguage('gcode', gcode);
+// Register language for GCode syntax highlighting
+PrismLight.registerLanguage('gcode', gcode);
 
 const vsCodeLightTheme = {
   'code[class*="language-"]': {
