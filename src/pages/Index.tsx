@@ -51,9 +51,9 @@ const Index = () => {
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div className="w-full md:w-1/3">
               <img
-                src="/lovable-uploads/67e41cd2-c9f7-4430-acd5-a13132c51ded.png"
+                src="/lovable-uploads/8ec1fac5-f729-4896-bf32-0312b9fefe9f.png"
                 alt="Tree with bench illustration"
-                className="w-full h-auto rounded-lg shadow-lg"
+                className="w-full h-auto opacity-80 dark:opacity-90 dark:invert-[0.15] mix-blend-multiply dark:mix-blend-screen transition-all duration-300"
               />
             </div>
             <div className="w-full md:w-2/3 text-center md:text-left">
