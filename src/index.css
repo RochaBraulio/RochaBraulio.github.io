@@ -1,11 +1,10 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 0 0% 98%;
     --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
@@ -34,27 +33,16 @@
     --ring: 252 59% 48%;
 
     --radius: 0.5rem;
-
-    /* Code block styling variables */
-    --tw-prose-body: var(--foreground);
-    --tw-prose-headings: var(--foreground);
-    --tw-prose-lead: var(--muted-foreground);
-    --tw-prose-links: var(--primary);
-    --tw-prose-links-hover: hsl(252, 60%, 38%);
-    --tw-prose-code: hsl(252, 60%, 45%);
-    --tw-prose-code-bg: hsl(210, 40%, 96%);
-    --tw-prose-pre-code: hsl(210, 40%, 98%);
-    --tw-prose-pre-bg: hsl(222, 47%, 11%);
   }
 
   .dark {
-    --background: 222 47% 11%;
+    --background: 0 0% 4%;
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 11%;
+    --card: 0 0% 4%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 47% 11%;
+    --popover: 0 0% 4%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 252 59% 54%;
@@ -64,7 +52,7 @@
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217 33% 18%;
-    --muted-foreground: 215 20% 65%;
+    --muted-foreground: 215 20% 70%;
 
     --accent: 217 33% 18%;
     --accent-foreground: 210 40% 98%;
@@ -75,17 +63,6 @@
     --border: 217 33% 18%;
     --input: 217 33% 18%;
     --ring: 252 59% 54%;
-
-    /* Code block styling variables */
-    --tw-prose-body: var(--foreground);
-    --tw-prose-headings: var(--foreground);
-    --tw-prose-lead: var(--muted-foreground);
-    --tw-prose-links: var(--primary);
-    --tw-prose-links-hover: hsl(252, 60%, 65%);
-    --tw-prose-code: hsl(252, 60%, 65%);
-    --tw-prose-code-bg: hsl(217, 33%, 18%);
-    --tw-prose-pre-code: hsl(210, 40%, 98%);
-    --tw-prose-pre-bg: hsl(222, 47%, 11%);
   }
 }
 
