@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
@@ -51,9 +52,23 @@ const Index = () => {
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div className="w-full md:w-1/3">
               <img
-                src="/lovable-uploads/8ec1fac5-f729-4896-bf32-0312b9fefe9f.png"
+                src="/lovable-uploads/ea6e8f60-b633-456d-a6a2-37c0eaafef00.png"
                 alt="Tree with bench illustration"
-                className="w-full h-auto opacity-80 dark:opacity-90 dark:invert-[0.15] mix-blend-multiply dark:mix-blend-screen transition-all duration-300"
+                className="
+                  w-full h-auto
+                  rounded-xl
+                  shadow-lg
+                  opacity-95
+                  mix-blend-multiply
+                  dark:opacity-90
+                  dark:mix-blend-screen
+                  transition-all duration-300
+                  bg-transparent
+                  "
+                style={{
+                  filter: "drop-shadow(0 8px 24px rgba(34,34,34,0.14)) blur(0.5px)",
+                  background: "transparent"
+                }}
               />
             </div>
             <div className="w-full md:w-2/3 text-center md:text-left">
