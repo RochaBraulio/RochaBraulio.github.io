@@ -9,7 +9,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ShareButtons } from "@/components/ShareButtons";
 import { Comments } from "@/components/Comments";
-import { D3LineChart } from "@/components/D3LineChart";
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -113,16 +112,6 @@ const Post = () => {
             >
               {content}
             </ReactMarkdown>
-
-            {post.id === "5" && (
-              <div className="my-8">
-                <h3 className="text-xl font-medium mb-4">Interactive D3.js Visualization</h3>
-                <p className="text-muted-foreground mb-4">
-                  Here's a live example of the D3.js line chart we discussed above:
-                </p>
-                <D3LineChart />
-              </div>
-            )}
           </div>
 
           <div className="mt-16 border-t pt-8">
