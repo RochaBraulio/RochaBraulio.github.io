@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
@@ -13,27 +12,22 @@ const Index = () => {
   const popularPosts = getPopularPosts();
   const recentPosts = getRecentPosts();
   
-  // Initialize search
   const { searchQuery, setSearchQuery, searchResults } = useSearch(blogPosts);
   
-  // Filter posts by selected tag
   const filteredPosts = filterTag
     ? searchResults.filter(post => post.tags.includes(filterTag))
     : searchResults;
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    // Reset tag filter if we're searching
     if (query) setFilterTag(null);
   };
   
   const handleTagFilter = (tag: string) => {
     if (filterTag === tag) {
-      // If clicking the active tag, clear the filter
       setFilterTag(null);
     } else {
       setFilterTag(tag);
-      // Clear search if we're filtering by tag
       setSearchQuery('');
     }
   };
@@ -42,7 +36,6 @@ const Index = () => {
 
   return (
     <Layout onSearch={handleSearch}>
-      {/* Hero Section */}
       <section className="py-12 md:py-24 bg-gradient-to-b from-primary/10 to-background">
         <div className="container flex flex-col items-center text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
@@ -55,19 +48,17 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Featured Post */}
       {featuredPost && !searchQuery && !filterTag && (
         <section className="py-12">
-          <div className="container">
+          <div className="container max-w-6xl">
             <h2 className="text-2xl font-bold tracking-tight mb-6">Featured Post</h2>
             <BlogCard post={featuredPost} featured />
           </div>
         </section>
       )}
       
-      {/* Categories/Tags */}
       <section className="py-6">
-        <div className="container">
+        <div className="container max-w-6xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold tracking-tight">Categories</h2>
             {filterTag && (
@@ -91,9 +82,8 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Posts Grid */}
       <section className="py-6">
-        <div className="container">
+        <div className="container max-w-6xl">
           <h2 className="text-2xl font-bold tracking-tight mb-6">
             {searchQuery 
               ? `Search Results for "${searchQuery}"` 
@@ -107,7 +97,7 @@ const Index = () => {
               <p className="text-muted-foreground">No posts found. Try a different search term or category.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="space-y-8">
               {filteredPosts.map(post => (
                 <BlogCard key={post.id} post={post} />
               ))}
@@ -116,12 +106,11 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Popular Posts */}
       {!searchQuery && !filterTag && (
         <section className="py-12">
-          <div className="container">
+          <div className="container max-w-6xl">
             <h2 className="text-2xl font-bold tracking-tight mb-6">Popular Posts</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-8">
               {popularPosts.map(post => (
                 <BlogCard key={post.id} post={post} />
               ))}
