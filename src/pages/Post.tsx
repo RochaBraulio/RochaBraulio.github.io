@@ -1,14 +1,22 @@
+
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { useSearch } from "@/hooks/useSearch";
-import { blogPosts, getPostById } from "@/utils/blogData";
+import { blogPosts, getPostById, trackPageView } from "@/utils/blogData";
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ShareButtons } from "@/components/ShareButtons";
 import { Comments } from "@/components/Comments";
+import { StlViewer } from "@/components/StlViewer";
+
+// Register language for GCode syntax highlighting
+import { PrismLight as SyntaxHighlighterLight } from 'react-syntax-highlighter';
+import gcode from 'react-syntax-highlighter/dist/esm/languages/prism/gcode';
+
+SyntaxHighlighterLight.registerLanguage('gcode', gcode);
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +28,7 @@ const Post = () => {
   useEffect(() => {
     if (id && post) {
       console.log(`Viewed post: ${id}`);
+      trackPageView(id);
     }
   }, [id, post]);
   
@@ -93,6 +102,12 @@ const Post = () => {
               components={{
                 code: ({ className, children, ...props }) => {
                   const match = /language-(\w+)/.exec(className || '');
+                  
+                  // Check if this is an STL viewer block
+                  if (match && match[1] === 'stl') {
+                    return <StlViewer url={String(children).trim()} />;
+                  }
+                  
                   return match ? (
                     <SyntaxHighlighter
                       language={match[1]}
