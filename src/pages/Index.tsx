@@ -4,20 +4,28 @@ import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
 import { Button } from "@/components/ui/button";
 import { useSearch } from "@/hooks/useSearch";
-import { blogPosts, getCategories, getPopularPosts, getRecentPosts } from "@/utils/blogData";
+import { blogPosts, getCategories } from "@/utils/blogData";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Index = () => {
   const [filterTag, setFilterTag] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<"date" | "popularity">("date");
   const categories = getCategories();
-  const popularPosts = getPopularPosts();
-  const recentPosts = getRecentPosts();
   
   const { searchQuery, setSearchQuery, searchResults } = useSearch(blogPosts);
   
   const filteredPosts = filterTag
     ? searchResults.filter(post => post.tags.includes(filterTag))
     : searchResults;
+
+  // Sort posts based on selected criteria
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    if (sortBy === "popularity") {
+      return b.views - a.views;
+    }
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -51,11 +59,25 @@ const Index = () => {
         <div className="container max-w-6xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold tracking-tight">Categories</h2>
-            {filterTag && (
-              <Button variant="ghost" onClick={() => setFilterTag(null)}>
-                Clear filter
-              </Button>
-            )}
+            <div className="flex items-center gap-4">
+              <Select
+                value={sortBy}
+                onValueChange={(value: "date" | "popularity") => setSortBy(value)}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="date">Most Recent</SelectItem>
+                  <SelectItem value="popularity">Most Popular</SelectItem>
+                </SelectContent>
+              </Select>
+              {filterTag && (
+                <Button variant="ghost" onClick={() => setFilterTag(null)}>
+                  Clear filter
+                </Button>
+              )}
+            </div>
           </div>
           <div className="flex flex-wrap gap-2 mb-6">
             {categories.map(category => (
@@ -79,37 +101,25 @@ const Index = () => {
               ? `Search Results for "${searchQuery}"` 
               : filterTag 
                 ? `Posts in "${filterTag}"` 
-                : "Recent Posts"}
+                : "All Posts"}
           </h2>
           
-          {filteredPosts.length === 0 ? (
+          {sortedPosts.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">No posts found. Try a different search term or category.</p>
             </div>
           ) : (
             <div className="space-y-8">
-              {filteredPosts.map(post => (
+              {sortedPosts.map(post => (
                 <BlogCard key={post.id} post={post} />
               ))}
             </div>
           )}
         </div>
       </section>
-      
-      {!searchQuery && !filterTag && (
-        <section className="py-12">
-          <div className="container max-w-6xl">
-            <h2 className="text-2xl font-bold tracking-tight mb-6">Popular Posts</h2>
-            <div className="space-y-8">
-              {popularPosts.map(post => (
-                <BlogCard key={post.id} post={post} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
     </Layout>
   );
 };
 
 export default Index;
+
