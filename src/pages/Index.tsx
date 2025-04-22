@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
@@ -48,14 +47,25 @@ const Index = () => {
   return (
     <Layout onSearch={handleSearch} className="bg-[#FCFBF8] dark:bg-[#0A0A0A]">
       <section className="py-12 md:py-24 bg-[#FCFBF8] dark:bg-[#0A0A0A]">
-        <div className="container flex flex-col items-center text-center">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
-            Data Analytics & 3D Printing Blog
-          </h1>
-          <p className="text-muted-foreground text-lg md:text-xl max-w-[700px] mb-8">
-            Exploring the intersection of data science and 3D printing technology.
-            Tutorials, guides, and insights to help you master both worlds.
-          </p>
+        <div className="container">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div className="w-full md:w-1/3">
+              <img
+                src="/lovable-uploads/67e41cd2-c9f7-4430-acd5-a13132c51ded.png"
+                alt="Tree with bench illustration"
+                className="w-full h-auto rounded-lg shadow-lg"
+              />
+            </div>
+            <div className="w-full md:w-2/3 text-center md:text-left">
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
+                Data Analytics & 3D Printing Blog
+              </h1>
+              <p className="text-muted-foreground text-lg md:text-xl max-w-[700px] mb-8">
+                Exploring the intersection of data science and 3D printing technology.
+                Tutorials, guides, and insights to help you master both worlds.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
       
