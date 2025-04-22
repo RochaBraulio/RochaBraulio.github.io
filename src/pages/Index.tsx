@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { BlogCard } from "@/components/BlogCard";
@@ -118,7 +119,7 @@ const Index = () => {
               ))}
               
               {!showAllPosts && sortedPosts.length > POSTS_PER_PAGE && (
-                <div className="mt-4 ml-0 md:ml-[calc(33.333%-2rem)]">
+                <div className="mt-4 text-left">
                   <Button 
                     variant="outline" 
                     onClick={() => setShowAllPosts(true)}
