@@ -98,17 +98,19 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({
         .style("font-size", "13px")
         .style("fill", "#075985");
 
-      // X Axis
-      svg
-        .selectAll(".x-axis")
+      // X Axis - Fix the TypeScript error by creating the axis group first
+      const xAxisGroup = svg
+        .selectAll<SVGGElement, number>(".x-axis")
         .data([0])
         .join(
           enter => enter.append("g").attr("class", "x-axis"),
           update => update,
           exit => exit.remove()
         )
-        .attr("transform", `translate(${left},${top + chartHeight})`)
-        .call(d3.axisBottom(x).ticks(5).tickSizeOuter(0));
+        .attr("transform", `translate(${left},${top + chartHeight})`);
+      
+      // Now call the axis on the properly typed group
+      xAxisGroup.call(d3.axisBottom(x).ticks(5).tickSizeOuter(0) as any);
 
       // Year label
       svg
