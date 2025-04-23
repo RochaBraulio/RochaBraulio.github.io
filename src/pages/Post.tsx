@@ -25,9 +25,11 @@ const defaultComponents = {
   BarChartRace,
   code: ({ className, children, ...props }: any) => {
     const match = /language-(\w+)/.exec(className || '');
-
+    
+    // Handle STL file rendering
     if (match && match[1] === 'stl') {
-      return <StlViewer url={String(children).trim()} />;
+      const stlUrl = String(children).trim();
+      return <StlViewer url={stlUrl} />;
     }
 
     if (match && match[1] === 'python' && String(children).includes('plt.')) {

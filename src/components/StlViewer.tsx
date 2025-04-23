@@ -11,7 +11,10 @@ interface StlViewerProps {
 }
 
 function Model({ url }: { url: string }) {
-  const { scene } = useGLTF(url);
+  // Remove any leading/trailing whitespace that might come from markdown code blocks
+  const cleanUrl = url.trim();
+  
+  const { scene } = useGLTF(cleanUrl);
   
   // Center the model
   const [centerOffset] = useState(() => {
