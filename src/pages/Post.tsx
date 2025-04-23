@@ -11,6 +11,26 @@ import { StlViewer } from "@/components/StlViewer";
 import { PyPlot } from "@/components/PyPlot";
 import { CodeBlock } from "@/components/CodeBlock";
 import { PostHeader } from "@/components/PostHeader";
+import { BarChartRace } from "@/components/BarChartRace";
+
+const demoData = [
+  { name: "Alpha", value: 44, year: 2018 },
+  { name: "Beta", value: 25, year: 2018 },
+  { name: "Gamma", value: 36, year: 2018 },
+  { name: "Alpha", value: 49, year: 2019 },
+  { name: "Beta", value: 22, year: 2019 },
+  { name: "Gamma", value: 40, year: 2019 },
+  { name: "Alpha", value: 54, year: 2020 },
+  { name: "Beta", value: 27, year: 2020 },
+  { name: "Gamma", value: 42, year: 2020 },
+];
+
+const BarChartRaceDemo = () => (
+  <div className="my-8 max-w-full overflow-x-auto">
+    <BarChartRace data={demoData} width={560} height={300} />
+    <div className="text-xs text-center mt-2 text-slate-500">Animated D3 bar chart race demo</div>
+  </div>
+);
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -82,7 +102,8 @@ const Post = () => {
                       {children}
                     </code>
                   );
-                }
+                },
+                BarChartRaceDemo: () => <BarChartRaceDemo />,
               }}
             >
               {post.content}
