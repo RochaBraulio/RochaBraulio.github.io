@@ -59,7 +59,12 @@ const demoData = [
   { name: "Gamma", value: 42, year: 2020 },
 ];
 
-const MDXContent = ({ content, components = {} }) => {
+interface MDXContentProps {
+  content: string;
+  components?: Record<string, React.ComponentType<any>>;
+}
+
+const MDXContent = ({ content, components = {} }: MDXContentProps) => {
   const [Component, setComponent] = React.useState<React.ComponentType | null>(null);
 
   React.useEffect(() => {
