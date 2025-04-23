@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
@@ -12,6 +13,7 @@ import { PyPlot } from "@/components/PyPlot";
 import { CodeBlock } from "@/components/CodeBlock";
 import { PostHeader } from "@/components/PostHeader";
 import { BarChartRace } from "@/components/BarChartRace";
+import { LineChartDemo } from "@/components/LineChartDemo"; // Add the new import
 
 const demoData = [
   { name: "Alpha", value: 44, year: 2018 },
@@ -36,23 +38,23 @@ const Post = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { searchQuery, setSearchQuery } = useSearch(blogPosts);
-  
+
   const post = id ? getPostById(id) : undefined;
-  
+
   useEffect(() => {
     if (id && post) {
       console.log(`Viewed post: ${id}`);
       trackPageView(id);
     }
   }, [id, post]);
-  
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query) {
       navigate('/');
     }
   };
-  
+
   if (!post) {
     return (
       <Layout onSearch={handleSearch} className="bg-[#FCFBF8] dark:bg-[#0A0A0A]">
@@ -71,29 +73,29 @@ const Post = () => {
       </Layout>
     );
   }
-  
+
   return (
     <Layout onSearch={handleSearch} className="bg-[#FCFBF8] dark:bg-[#0A0A0A]">
       <article className="animate-in bg-[#FCFBF8] dark:bg-[#0A0A0A]">
         <PostHeader {...post} />
-        
+
         <div className="prose-container py-16">
           <div className="blog-content font-light">
             <ReactMarkdown
               components={{
                 code: ({ className, children, ...props }) => {
                   const match = /language-(\w+)/.exec(className || '');
-                  
+
                   if (match && match[1] === 'stl') {
                     return <StlViewer url={String(children).trim()} />;
                   }
-                  
+
                   if (match && match[1] === 'python' && String(children).includes('plt.')) {
                     return <PyPlot code={String(children).trim()} />;
                   }
-                  
+
                   return match ? (
-                    <CodeBlock 
+                    <CodeBlock
                       language={match[1]}
                       value={String(children)}
                     />
@@ -105,11 +107,15 @@ const Post = () => {
                 },
                 p: ({ node, ...props }) => {
                   const content = String(props.children);
-                  
+
                   if (content.trim() === '<BarChartRaceDemo />') {
                     return <BarChartRaceDemo />;
                   }
-                  
+
+                  if (content.trim() === '<LineChartDemo />') {
+                    return <LineChartDemo />;
+                  }
+
                   return <p {...props} />;
                 }
               }}
