@@ -1,4 +1,3 @@
-
 import { BlogPost } from "@/utils/blogData";
 
 const post: BlogPost = {

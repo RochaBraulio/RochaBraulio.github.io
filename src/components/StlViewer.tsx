@@ -1,8 +1,7 @@
 
-import React, { useRef, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei';
+import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 
 interface StlViewerProps {
   url?: string;
@@ -11,52 +10,79 @@ interface StlViewerProps {
   height?: number;
 }
 
-function Model({ url }: { url: string }) {
-  // Remove any leading/trailing whitespace that might come from markdown code blocks
-  const cleanUrl = url.trim();
-  
-  const { scene } = useGLTF(cleanUrl);
-  
-  // Center the model
-  const [centerOffset] = useState(() => {
-    const box = new THREE.Box3().setFromObject(scene);
-    const center = box.getCenter(new THREE.Vector3());
-    return center.multiplyScalar(-1);
-  });
-
-  // Clone the scene to avoid reference issues
-  const modelScene = scene.clone();
-  modelScene.position.add(centerOffset);
-  
-  return <primitive object={modelScene} />;
-}
-
-function Cube() {
-  return (
-    <mesh>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshPhongMaterial color={0x44ff44} />
-    </mesh>
-  );
-}
-
 export const StlViewer = ({ url, shape, width = 800, height = 500 }: StlViewerProps) => {
+  const mountRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!mountRef.current) return;
+
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.z = 5;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    mountRef.current.appendChild(renderer.domElement);
+
+    // Lighting
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(1, 1, 1).normalize();
+    scene.add(light);
+
+    const ambient = new THREE.AmbientLight(0x404040);
+    scene.add(ambient);
+
+    let mesh: THREE.Mesh | null = null;
+
+    // Handle STL model
+    if (url) {
+      const loader = new STLLoader();
+      loader.load(url.trim(), (geometry) => {
+        const material = new THREE.MeshStandardMaterial({ color: 'steelblue' });
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.rotation.x = -0.5 * Math.PI;
+        scene.add(mesh);
+
+        // Center the model
+        const box = new THREE.Box3().setFromObject(mesh);
+        const center = box.getCenter(new THREE.Vector3());
+        mesh.position.sub(center);
+      });
+    }
+
+    // Handle cube
+    if (shape === 'cube') {
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshPhongMaterial({ color: 0x44ff44 });
+      mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+    }
+
+    // Animation loop
+    const animate = () => {
+      requestAnimationFrame(animate);
+      if (mesh) {
+        mesh.rotation.y += 0.01;
+      }
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Cleanup
+    return () => {
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+    };
+  }, [url, shape, width, height]);
+
   return (
-    <div className="w-full overflow-x-auto bg-card rounded-lg p-4 my-8" style={{ height }}>
-      <Canvas shadows>
-        <ambientLight intensity={0.5} />
-        <directionalLight 
-          position={[10, 10, 10]} 
-          intensity={1}
-          castShadow
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-        />
-        <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-        {url ? <Model url={url} /> : null}
-        {shape === 'cube' ? <Cube /> : null}
-        <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
-      </Canvas>
-    </div>
+    <div 
+      ref={mountRef} 
+      className="w-full overflow-x-auto bg-card rounded-lg p-4 my-8" 
+      style={{ height }}
+    />
   );
 };
+
