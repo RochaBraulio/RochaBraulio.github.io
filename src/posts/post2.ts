@@ -1,3 +1,4 @@
+
 import { BlogPost } from "@/utils/blogData";
 
 const post: BlogPost = {
@@ -11,7 +12,13 @@ const post: BlogPost = {
 
 While 3D printing is often associated with creating decorative models or prototypes, today's technology allows us to create functional parts that can withstand real-world use.
 
-## Example Model
+## Basic 3D Shape Example
+Here's a basic 3D cube you can interact with:
+
+\`\`\`shape-cube
+\`\`\`
+
+## Example STL Model
 Below is a 3D model that demonstrates some of the principles we'll discuss:
 
 \`\`\`stl

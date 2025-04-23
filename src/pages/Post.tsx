@@ -32,6 +32,11 @@ const defaultComponents = {
       return <StlViewer url={stlUrl} />;
     }
 
+    // Handle basic shapes
+    if (match && match[1] === 'shape-cube') {
+      return <StlViewer shape="cube" />;
+    }
+
     if (match && match[1] === 'python' && String(children).includes('plt.')) {
       return <PyPlot code={String(children).trim()} />;
     }

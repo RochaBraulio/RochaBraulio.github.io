@@ -5,7 +5,8 @@ import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface StlViewerProps {
-  url: string;
+  url?: string;
+  shape?: 'cube';
   width?: number;
   height?: number;
 }
@@ -30,7 +31,16 @@ function Model({ url }: { url: string }) {
   return <primitive object={modelScene} />;
 }
 
-export const StlViewer = ({ url, width = 800, height = 500 }: StlViewerProps) => {
+function Cube() {
+  return (
+    <mesh>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshPhongMaterial color={0x44ff44} />
+    </mesh>
+  );
+}
+
+export const StlViewer = ({ url, shape, width = 800, height = 500 }: StlViewerProps) => {
   return (
     <div className="w-full overflow-x-auto bg-card rounded-lg p-4 my-8" style={{ height }}>
       <Canvas shadows>
@@ -43,7 +53,8 @@ export const StlViewer = ({ url, width = 800, height = 500 }: StlViewerProps) =>
           shadow-mapSize-height={1024}
         />
         <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-        <Model url={url} />
+        {url ? <Model url={url} /> : null}
+        {shape === 'cube' ? <Cube /> : null}
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
       </Canvas>
     </div>
