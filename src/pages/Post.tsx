@@ -64,28 +64,31 @@ interface MDXContentProps {
   components?: Record<string, React.ComponentType<any>>;
 }
 
+// Fixed MDXContent component to properly handle MDX content
 const MDXContent = ({ content, components = {} }: MDXContentProps) => {
   const [Component, setComponent] = React.useState<React.ComponentType | null>(null);
 
   React.useEffect(() => {
     async function compileMdx() {
       try {
-        // Use the VFile constructor to create a virtual file
+        // Compile the MDX content
         const compiledMdx = await mdx.compile(content, { outputFormat: 'function-body' });
         
-        // Create a function from the compiled MDX
+        // Convert the compiled MDX to a string
         const code = String(compiledMdx);
         
-        // Modified approach to avoid React child rendering issues
+        // Create a function that returns a component
+        // Using a more direct approach to avoid object issues
         const fn = new Function('React', 'components', `
           ${code}
-          return props => {
+          return function MDXScope(props) {
             return React.createElement(MDXContent, Object.assign({}, props, { components }));
-          };
+          }
         `);
         
         // Create the component with proper React and components context
-        setComponent(() => fn(React, components));
+        const MDXComponent = fn(React, components);
+        setComponent(() => MDXComponent);
       } catch (error) {
         console.error("Error compiling MDX:", error);
       }
@@ -94,7 +97,7 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
     compileMdx();
   }, [content, components]);
 
-  // Add the BarChartRace component for post #11
+  // Special handling for post #11 with the D3 Bar Chart Race
   if (content.includes("D3 Bar Chart Race") && !Component) {
     return (
       <div className="py-8">
