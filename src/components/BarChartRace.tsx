@@ -49,7 +49,7 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({
       byYear[d.year].push(d);
     });
 
-    console.log("BarChartRace data processed:", byYear);
+    console.log("BarChartRace data loaded:", byYear);
 
     function draw(year: number) {
       const yearData = (byYear[year] || [])
@@ -70,6 +70,21 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({
         .range([0, chartHeight])
         .padding(0.1);
 
+      // Add year label if it doesn't exist
+      let yearLabel = svg.select(".year-label");
+      if (yearLabel.empty()) {
+        yearLabel = svg
+          .append("text")
+          .attr("class", "year-label")
+          .attr("x", width / 2)
+          .attr("y", top - 8)
+          .attr("text-anchor", "middle")
+          .attr("font-size", 24)
+          .attr("font-weight", 600)
+          .style("fill", "#0f172a");
+      }
+      yearLabel.text(year);
+
       // Create/update bars
       svg
         .selectAll(".bar")
@@ -82,7 +97,7 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({
             .attr("x", left)
             .attr("y", d => top + y((d as BarChartRaceDatum).name)!)
             .attr("height", y.bandwidth())
-            .attr("width", 0), // Start with width 0 for animation
+            .attr("width", 0),
           update => update,
           exit => exit.remove()
         )
@@ -156,24 +171,11 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({
       }
       
       xAxisGroup.call(d3.axisBottom(x).ticks(5).tickSizeOuter(0) as any);
-
-      // Year label - Create or update
-      let yearLabel = svg.select(".year-label");
-      
-      if (yearLabel.empty()) {
-        yearLabel = svg
-          .append("text")
-          .attr("class", "year-label")
-          .attr("x", width / 2)
-          .attr("y", top - 8)
-          .attr("text-anchor", "middle")
-          .attr("font-size", 24)
-          .attr("font-weight", 600)
-          .style("fill", "#0f172a");
-      }
-      
-      yearLabel.text(year);
     }
+
+    // Start the animation with an initial render
+    draw(years[0]);
+    console.log("Initial BarChartRace render complete");
 
     let interval: ReturnType<typeof setTimeout> | null = null;
     let stopped = false;

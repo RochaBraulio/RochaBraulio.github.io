@@ -1,5 +1,6 @@
 
 import { BlogPost } from "@/utils/blogData";
+import { BarChartRace } from "@/components/BarChartRace";
 
 const post: BlogPost = {
   id: "11",
@@ -77,7 +78,7 @@ The data should be an array of objects like:
 
 ## Going Further
 
-- **Integrate with blog rendering**: To embed the actual React component in posts (not just show code), you’ll need a custom mechanism in your markdown renderer.
+- **Integrate with blog rendering**: To embed the actual React component in posts (not just show code), you'll need a custom mechanism in your markdown renderer.
 - **Use Observable/D3 notebooks**: Explore and adapt other advanced D3 patterns!
 
 Let me know if you want a live example D3 bar chart race embedded in the blog!
@@ -86,6 +87,7 @@ Let me know if you want a live example D3 bar chart race embedded in the blog!
     "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80",
   tags: ["D3.js", "Data Visualization", "JavaScript", "Bar Chart Race"],
   views: 0,
+  components: { BarChartRace }, // Add the BarChartRace component
 };
 
 export default post;
