@@ -103,7 +103,15 @@ const Post = () => {
                     </code>
                   );
                 },
-                BarChartRaceDemo: () => <BarChartRaceDemo />,
+                p: ({ node, ...props }) => {
+                  const content = String(props.children);
+                  
+                  if (content.trim() === '<BarChartRaceDemo />') {
+                    return <BarChartRaceDemo />;
+                  }
+                  
+                  return <p {...props} />;
+                }
               }}
             >
               {post.content}
