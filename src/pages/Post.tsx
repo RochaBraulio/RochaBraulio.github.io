@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
@@ -13,7 +12,7 @@ import { PyPlot } from "@/components/PyPlot";
 import { CodeBlock } from "@/components/CodeBlock";
 import { PostHeader } from "@/components/PostHeader";
 import { BarChartRace } from "@/components/BarChartRace";
-import { LineChartDemo } from "@/components/LineChartDemo"; // Add the new import
+import { LineChartDemo } from "@/components/LineChartDemo";
 
 const demoData = [
   { name: "Alpha", value: 44, year: 2018 },
@@ -108,12 +107,12 @@ const Post = () => {
                 p: ({ node, ...props }) => {
                   const content = String(props.children);
 
-                  if (content.trim() === '<BarChartRaceDemo />') {
-                    return <BarChartRaceDemo />;
-                  }
-
                   if (content.trim() === '<LineChartDemo />') {
                     return <LineChartDemo />;
+                  }
+                  
+                  if (content.trim() === '<BarChartRaceDemo />') {
+                    return <BarChartRaceDemo />;
                   }
 
                   return <p {...props} />;

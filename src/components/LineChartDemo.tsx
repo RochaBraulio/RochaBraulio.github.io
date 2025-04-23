@@ -24,8 +24,8 @@ export const LineChartDemo: React.FC<LineChartDemoProps> = ({ width = 560, heigh
     if (!ref.current) return;
 
     // Dynamically import D3 to avoid the import resolution issue
-    import('d3').then((d3) => {
-      const svg = d3.select(ref.current);
+    import('d3').then((d3Module) => {
+      const svg = d3Module.select(ref.current);
       svg.selectAll("*").remove();
 
       const margin = { top: 30, right: 40, bottom: 40, left: 50 };
@@ -33,12 +33,12 @@ export const LineChartDemo: React.FC<LineChartDemoProps> = ({ width = 560, heigh
       const innerHeight = height - margin.top - margin.bottom;
 
       // Scale
-      const x = d3.scaleTime()
-        .domain(d3.extent(data, d => d.date) as [Date, Date])
+      const x = d3Module.scaleTime()
+        .domain(d3Module.extent(data, d => d.date) as [Date, Date])
         .range([0, innerWidth]);
 
-      const y = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.value)!])
+      const y = d3Module.scaleLinear()
+        .domain([0, d3Module.max(data, d => d.value)!])
         .nice()
         .range([innerHeight, 0]);
 
@@ -50,12 +50,12 @@ export const LineChartDemo: React.FC<LineChartDemoProps> = ({ width = 560, heigh
       // X Axis
       g.append("g")
         .attr("transform", `translate(0,${innerHeight})`)
-        .call(d3.axisBottom(x).ticks(width < 400 ? 4 : 7).tickFormat(d3.timeFormat("%Y") as any))
+        .call(d3Module.axisBottom(x).ticks(width < 400 ? 4 : 7).tickFormat(d3Module.timeFormat("%Y") as any))
         .attr("font-size", 12);
 
       // Y Axis
       g.append("g")
-        .call(d3.axisLeft(y).ticks(5))
+        .call(d3Module.axisLeft(y).ticks(5))
         .attr("font-size", 12);
 
       // Line
@@ -64,7 +64,7 @@ export const LineChartDemo: React.FC<LineChartDemoProps> = ({ width = 560, heigh
         .attr("fill", "none")
         .attr("stroke", "#2563eb")
         .attr("stroke-width", 3)
-        .attr("d", d3.line<{ date: Date; value: number }>()
+        .attr("d", d3Module.line<{ date: Date; value: number }>()
           .x(d => x(d.date))
           .y(d => y(d.value))
         );
@@ -84,7 +84,10 @@ export const LineChartDemo: React.FC<LineChartDemoProps> = ({ width = 560, heigh
       // Tooltip interaction: basic (title tag on circles)
       g.selectAll("circle")
         .append("title")
-        .text(d => `${d3.timeFormat("%b %Y")(d.date)}: ${d.value}`);
+        .text((d) => {
+          const typedD = d as unknown as { date: Date; value: number };
+          return `${d3Module.timeFormat("%b %Y")(typedD.date)}: ${typedD.value}`;
+        });
     }).catch(error => {
       console.error("Failed to load D3:", error);
     });
