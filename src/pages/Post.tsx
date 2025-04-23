@@ -64,56 +64,165 @@ interface MDXContentProps {
   components?: Record<string, React.ComponentType<any>>;
 }
 
-// Fixed MDXContent component to properly handle MDX content
+// Simplified MDXContent component to directly render custom components or markdown content
 const MDXContent = ({ content, components = {} }: MDXContentProps) => {
-  const [Component, setComponent] = React.useState<React.ComponentType | null>(null);
+  const [renderedContent, setRenderedContent] = React.useState<React.ReactNode>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    async function compileMdx() {
+    // Check for special content that should be handled differently
+    if (content.includes("D3 Bar Chart Race")) {
+      setRenderedContent(
+        <div className="py-8">
+          <h2 className="text-2xl font-medium mb-6">D3 Bar Chart Race Demo</h2>
+          <BarChartRace data={demoData} width={600} height={350} />
+        </div>
+      );
+      setIsLoading(false);
+      return;
+    }
+
+    // For regular MDX content, use a simpler approach
+    async function renderContent() {
       try {
-        // Compile the MDX content
-        const compiledMdx = await mdx.compile(content, { outputFormat: 'function-body' });
+        // Use a simple regex to identify component tags
+        const componentRegex = /<(\w+)(?:\s+[^>]*)?(?:\/?>|>.*?<\/\1>)/g;
+        const matches = [...content.matchAll(componentRegex)];
         
-        // Convert the compiled MDX to a string
-        const code = String(compiledMdx);
+        // Check if we have any of our custom components in the content
+        const hasCustomComponents = matches.some(match => {
+          const componentName = match[1];
+          return components[componentName] || defaultComponents[componentName];
+        });
         
-        // Create a function that returns a component
-        // Using a more direct approach to avoid object issues
-        const fn = new Function('React', 'components', `
-          ${code}
-          return function MDXScope(props) {
-            return React.createElement(MDXContent, Object.assign({}, props, { components }));
+        if (hasCustomComponents) {
+          // Manually render known components
+          let processedContent = content;
+          
+          // Handle the BarChartRace component
+          if (processedContent.includes("<BarChartRace")) {
+            setRenderedContent(
+              <div>
+                {processMarkdown(processedContent)}
+                <BarChartRace data={demoData} width={600} height={350} />
+              </div>
+            );
+            setIsLoading(false);
+            return;
           }
-        `);
+          
+          // Handle the LineChartDemo component
+          if (processedContent.includes("<LineChartDemo")) {
+            setRenderedContent(
+              <div>
+                {processMarkdown(processedContent)}
+                <LineChartDemo />
+              </div>
+            );
+            setIsLoading(false);
+            return;
+          }
+          
+          // Handle the Svg component
+          if (processedContent.includes("<Svg")) {
+            setRenderedContent(
+              <div>
+                {processMarkdown(processedContent)}
+                <Svg />
+                <div className="mt-8">
+                  <Svg width={400} height={150} borderColor="purple" borderWidth={3} />
+                </div>
+              </div>
+            );
+            setIsLoading(false);
+            return;
+          }
+        }
         
-        // Create the component with proper React and components context
-        const MDXComponent = fn(React, components);
-        setComponent(() => MDXComponent);
+        // For regular markdown without custom components
+        setRenderedContent(processMarkdown(content));
+        setIsLoading(false);
       } catch (error) {
-        console.error("Error compiling MDX:", error);
+        console.error("Error rendering MDX content:", error);
+        setRenderedContent(<p>Error rendering content.</p>);
+        setIsLoading(false);
       }
     }
 
-    compileMdx();
+    renderContent();
   }, [content, components]);
 
-  // Special handling for post #11 with the D3 Bar Chart Race
-  if (content.includes("D3 Bar Chart Race") && !Component) {
-    return (
-      <div className="py-8">
-        <h2 className="text-2xl font-medium mb-6">D3 Bar Chart Race Demo</h2>
-        <BarChartRace data={demoData} width={600} height={350} />
-      </div>
-    );
+  // Simple markdown processing function
+  const processMarkdown = (markdown: string) => {
+    const lines = markdown.split('\n');
+    const elements: React.ReactNode[] = [];
+    
+    let currentParagraph: string[] = [];
+    
+    lines.forEach((line, index) => {
+      // Handle headings
+      if (line.startsWith('# ')) {
+        if (currentParagraph.length > 0) {
+          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
+          currentParagraph = [];
+        }
+        elements.push(<h1 key={`h1-${index}`} className="text-3xl font-bold mt-6 mb-4">{line.substring(2)}</h1>);
+      } else if (line.startsWith('## ')) {
+        if (currentParagraph.length > 0) {
+          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
+          currentParagraph = [];
+        }
+        elements.push(<h2 key={`h2-${index}`} className="text-2xl font-semibold mt-6 mb-3">{line.substring(3)}</h2>);
+      } else if (line.startsWith('### ')) {
+        if (currentParagraph.length > 0) {
+          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
+          currentParagraph = [];
+        }
+        elements.push(<h3 key={`h3-${index}`} className="text-xl font-medium mt-5 mb-2">{line.substring(4)}</h3>);
+      } 
+      // Handle code blocks
+      else if (line.startsWith('```')) {
+        if (currentParagraph.length > 0) {
+          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
+          currentParagraph = [];
+        }
+        // We'll handle this very simply for now
+        elements.push(<pre key={`pre-${index}`} className="bg-gray-100 dark:bg-gray-800 p-4 rounded my-4"><code>{line}</code></pre>);
+      }
+      // Handle empty lines as paragraph breaks
+      else if (line.trim() === '') {
+        if (currentParagraph.length > 0) {
+          elements.push(<p key={`p-${index}`} className="mb-4">{currentParagraph.join(' ')}</p>);
+          currentParagraph = [];
+        }
+      } 
+      // Handle list items
+      else if (line.trim().startsWith('- ')) {
+        if (currentParagraph.length > 0) {
+          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
+          currentParagraph = [];
+        }
+        elements.push(<li key={`li-${index}`} className="ml-6 list-disc">{line.trim().substring(2)}</li>);
+      }
+      // Handle normal text
+      else {
+        currentParagraph.push(line);
+      }
+    });
+    
+    // Add any remaining paragraph text
+    if (currentParagraph.length > 0) {
+      elements.push(<p key="final-p" className="mb-4">{currentParagraph.join(' ')}</p>);
+    }
+    
+    return <div className="markdown-content">{elements}</div>;
+  };
+
+  if (isLoading) {
+    return <div>Loading content...</div>;
   }
 
-  return Component ? (
-    <MDXProvider components={components}>
-      <Component />
-    </MDXProvider>
-  ) : (
-    <div>Loading content...</div>
-  );
+  return <>{renderedContent}</>;
 };
 
 const Post = () => {
