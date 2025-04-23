@@ -75,11 +75,18 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
         
         // Create a function from the compiled MDX
         const code = String(compiledMdx);
-        const fn = new Function('React', 'mdx', 'props', `${code}; return React.createElement(MDXContent, props);`);
+        
+        // Create a component using a simpler approach to avoid the {default} object issue
+        const fn = new Function('React', 'components', `${code}; 
+          const MDXContent = (props) => {
+            return React.createElement(MDXScope, Object.assign({}, props, { components }));
+          };
+          return MDXContent;
+        `);
         
         // Create a component from the function
-        const MdxContent = (props: any) => fn(React, mdx, props);
-        setComponent(() => MdxContent);
+        const MdxComponent = fn(React, components);
+        setComponent(() => MdxComponent);
       } catch (error) {
         console.error("Error compiling MDX:", error);
       }
