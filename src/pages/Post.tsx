@@ -13,6 +13,7 @@ import { CodeBlock } from "@/components/CodeBlock";
 import { PostHeader } from "@/components/PostHeader";
 import { BarChartRace } from "@/components/BarChartRace";
 import { LineChartDemo } from "@/components/LineChartDemo";
+import { Svg } from "@/components/Svg";
 
 const demoData = [
   { name: "Alpha", value: 44, year: 2018 },
@@ -108,6 +109,11 @@ const Post = () => {
                 },
                 p: ({ node, children }) => {
                   if (typeof children === 'string') {
+                    if (children.trim() === '<Svg />') {
+                      console.log("Rendering Svg");
+                      return <Svg />;
+                    }
+                    
                     if (children.trim() === '<LineChartDemo />') {
                       console.log("Rendering LineChartDemo");
                       return <LineChartDemo />;
