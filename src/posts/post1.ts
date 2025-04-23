@@ -3,8 +3,8 @@ import { BlogPost } from "@/utils/blogData";
 
 const post: BlogPost = {
   id: "1",
-  title: "Getting Started with Data Analytics: A Beginner's Guide",
-  date: "2025-04-20",
+  title: "Building My Personal Training Database and Dashboard (Part 1)",
+  date: "2025-04-23",
   author: "Data Enthusiast",
   excerpt: "Learn the basics of data analytics and how to start your journey in this exciting field.",
   content: `
