@@ -1,5 +1,6 @@
 
 import { BlogPost } from "@/utils/blogData";
+import { Svg } from "@/components/Svg";
 
 const post: BlogPost = {
   id: "12",
@@ -16,13 +17,18 @@ Here's a simple SVG with a gold border:
 
 This is a basic example of rendering an SVG component directly in a blog post.
 
+Here's another SVG with a different border:
+
+<Svg width={400} height={150} borderColor="purple" borderWidth={3} />
+
 ## Key Features
 
 - Simple SVG rendering
-- Gold border
+- Custom border colors
+- Custom dimensions
 - Minimal code
 
-Try viewing the SVG below!
+Try viewing the SVGs above!
 
 ---
   `,
@@ -30,6 +36,7 @@ Try viewing the SVG below!
     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
   tags: ["SVG", "React", "Simple Component"],
   views: 0,
+  components: { Svg }, // Add the components that will be used in this post
 };
 
 export default post;

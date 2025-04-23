@@ -1,6 +1,9 @@
+
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import ReactMarkdown from 'react-markdown';
+import { MDXProvider } from '@mdx-js/react';
+import { compile } from '@mdx-js/mdx';
+import { runSync } from '@mdx-js/mdx/run';
 
 import { Layout } from "@/components/Layout";
 import { useSearch } from "@/hooks/useSearch";
@@ -15,6 +18,37 @@ import { BarChartRace } from "@/components/BarChartRace";
 import { LineChartDemo } from "@/components/LineChartDemo";
 import { Svg } from "@/components/Svg";
 
+// Default components that will be available in all MDX content
+const defaultComponents = {
+  Svg,
+  StlViewer,
+  PyPlot,
+  LineChartDemo,
+  BarChartRace,
+  code: ({ className, children, ...props }: any) => {
+    const match = /language-(\w+)/.exec(className || '');
+
+    if (match && match[1] === 'stl') {
+      return <StlViewer url={String(children).trim()} />;
+    }
+
+    if (match && match[1] === 'python' && String(children).includes('plt.')) {
+      return <PyPlot code={String(children).trim()} />;
+    }
+
+    return match ? (
+      <CodeBlock
+        language={match[1]}
+        value={String(children)}
+      />
+    ) : (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
+  },
+};
+
 const demoData = [
   { name: "Alpha", value: 44, year: 2018 },
   { name: "Beta", value: 25, year: 2018 },
@@ -27,14 +61,31 @@ const demoData = [
   { name: "Gamma", value: 42, year: 2020 },
 ];
 
-const BarChartRaceDemo = () => (
-  <div className="my-8 max-w-full overflow-x-auto">
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-      <BarChartRace data={demoData} width={560} height={300} />
-      <div className="text-xs text-center mt-2 text-slate-500">Animated D3 bar chart race demo</div>
-    </div>
-  </div>
-);
+const MDXContent = ({ content, components = {} }) => {
+  const [Component, setComponent] = React.useState<React.ComponentType | null>(null);
+
+  React.useEffect(() => {
+    async function compileMdx() {
+      try {
+        const compiledMdx = await compile(content, { outputFormat: 'function-body' });
+        const { default: MdxContent } = await runSync(String(compiledMdx), { ...components });
+        setComponent(() => MdxContent);
+      } catch (error) {
+        console.error("Error compiling MDX:", error);
+      }
+    }
+
+    compileMdx();
+  }, [content, components]);
+
+  return Component ? (
+    <MDXProvider components={components}>
+      <Component />
+    </MDXProvider>
+  ) : (
+    <div>Loading content...</div>
+  );
+};
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -76,6 +127,9 @@ const Post = () => {
     );
   }
 
+  // Combine the default components with any post-specific components
+  const mdxComponents = { ...defaultComponents, ...(post.components || {}) };
+
   return (
     <Layout onSearch={handleSearch} className="bg-[#FCFBF8] dark:bg-[#0A0A0A]">
       <article className="animate-in bg-[#FCFBF8] dark:bg-[#0A0A0A]">
@@ -83,54 +137,7 @@ const Post = () => {
 
         <div className="prose-container py-16">
           <div className="blog-content font-light">
-            <ReactMarkdown
-              components={{
-                code: ({ className, children, ...props }) => {
-                  const match = /language-(\w+)/.exec(className || '');
-
-                  if (match && match[1] === 'stl') {
-                    return <StlViewer url={String(children).trim()} />;
-                  }
-
-                  if (match && match[1] === 'python' && String(children).includes('plt.')) {
-                    return <PyPlot code={String(children).trim()} />;
-                  }
-
-                  return match ? (
-                    <CodeBlock
-                      language={match[1]}
-                      value={String(children)}
-                    />
-                  ) : (
-                    <code className={className} {...props}>
-                      {children}
-                    </code>
-                  );
-                },
-                p: ({ node, children }) => {
-                  if (typeof children === 'string') {
-                    if (children.trim() === '<Svg />') {
-                      console.log("Rendering Svg");
-                      return <Svg />;
-                    }
-                    
-                    if (children.trim() === '<LineChartDemo />') {
-                      console.log("Rendering LineChartDemo");
-                      return <LineChartDemo />;
-                    }
-                    
-                    if (children.trim() === '<BarChartRaceDemo />') {
-                      console.log("Rendering BarChartRaceDemo");
-                      return <BarChartRaceDemo />;
-                    }
-                  }
-
-                  return <p>{children}</p>;
-                }
-              }}
-            >
-              {post.content}
-            </ReactMarkdown>
+            <MDXContent content={post.content} components={mdxComponents} />
           </div>
 
           <div className="mt-16 border-t pt-8">

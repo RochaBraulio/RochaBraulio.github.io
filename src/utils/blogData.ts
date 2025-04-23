@@ -12,6 +12,7 @@ export interface BlogPost {
   coverImage: string;
   tags: string[];
   views: number;
+  components?: Record<string, React.ComponentType<any>>; // Add support for MDX components
 }
 
 export const blogPosts = allPosts;
