@@ -2,9 +2,7 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MDXProvider } from '@mdx-js/react';
-import { compile } from '@mdx-js/mdx';
-import { runSync } from '@mdx-js/mdx/run';
-
+import * as mdx from '@mdx-js/mdx';
 import { Layout } from "@/components/Layout";
 import { useSearch } from "@/hooks/useSearch";
 import { blogPosts, getPostById, trackPageView } from "@/utils/blogData";
@@ -67,8 +65,15 @@ const MDXContent = ({ content, components = {} }) => {
   React.useEffect(() => {
     async function compileMdx() {
       try {
-        const compiledMdx = await compile(content, { outputFormat: 'function-body' });
-        const { default: MdxContent } = await runSync(String(compiledMdx), { ...components });
+        // Use the VFile constructor to create a virtual file
+        const compiledMdx = await mdx.compile(content, { outputFormat: 'function-body' });
+        
+        // Create a function from the compiled MDX
+        const code = String(compiledMdx);
+        const fn = new Function('React', 'mdx', 'props', `${code}; return React.createElement(MDXContent, props);`);
+        
+        // Create a component from the function
+        const MdxContent = (props: any) => fn(React, mdx, props);
         setComponent(() => MdxContent);
       } catch (error) {
         console.error("Error compiling MDX:", error);
