@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
 export interface BarChartRaceDatum {
@@ -19,12 +19,19 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({
   width = 600,
   height = 350,
 }) => {
-  const ref = useRef<SVGSVGElement | null>(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Set mounted flag after initial render to ensure SSR compatibility
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
-    if (!data.length) return;
+    if (!isMounted || !svgRef.current || !data.length) return;
 
-    const svg = d3.select(ref.current);
+    // Clear any existing content
+    const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
     const years = Array.from(new Set(data.map(d => d.year))).sort();
@@ -42,11 +49,15 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({
       byYear[d.year].push(d);
     });
 
+    console.log("BarChartRace data processed:", byYear);
+
     function draw(year: number) {
       const yearData = (byYear[year] || [])
         .slice()
         .sort((a, b) => b.value - a.value)
         .slice(0, n);
+
+      console.log(`Drawing year ${year} with data:`, yearData);
 
       const x = d3
         .scaleLinear()
@@ -59,12 +70,22 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({
         .range([0, chartHeight])
         .padding(0.1);
 
+      // Create/update bars
       svg
         .selectAll(".bar")
         .data(yearData, d => (d as BarChartRaceDatum).name)
-        .join("rect")
-        .attr("class", "bar")
-        .attr("fill", "#60a5fa")
+        .join(
+          enter => enter
+            .append("rect")
+            .attr("class", "bar")
+            .attr("fill", "#60a5fa")
+            .attr("x", left)
+            .attr("y", d => top + y((d as BarChartRaceDatum).name)!)
+            .attr("height", y.bandwidth())
+            .attr("width", 0), // Start with width 0 for animation
+          update => update,
+          exit => exit.remove()
+        )
         .transition()
         .duration(400)
         .attr("x", left)
@@ -72,85 +93,125 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({
         .attr("height", y.bandwidth())
         .attr("width", d => x((d as BarChartRaceDatum).value));
 
+      // Create/update bar labels (names)
       svg
         .selectAll(".bar-label")
         .data(yearData, d => (d as BarChartRaceDatum).name)
-        .join("text")
-        .attr("class", "bar-label")
+        .join(
+          enter => enter
+            .append("text")
+            .attr("class", "bar-label")
+            .attr("x", left - 8)
+            .attr("y", d => top + (y((d as BarChartRaceDatum).name)! + y.bandwidth() / 2))
+            .attr("dy", "0.35em")
+            .attr("text-anchor", "end")
+            .attr("opacity", 0),
+          update => update,
+          exit => exit.remove()
+        )
+        .transition()
+        .duration(400)
         .attr("x", left - 8)
         .attr("y", d => top + (y((d as BarChartRaceDatum).name)! + y.bandwidth() / 2))
-        .attr("dy", "0.35em")
-        .attr("text-anchor", "end")
+        .attr("opacity", 1)
         .text(d => (d as BarChartRaceDatum).name)
         .style("font-size", "14px")
         .style("fill", "#1e293b");
 
+      // Create/update bar values
       svg
         .selectAll(".bar-value")
         .data(yearData, d => (d as BarChartRaceDatum).name)
-        .join("text")
-        .attr("class", "bar-value")
+        .join(
+          enter => enter
+            .append("text")
+            .attr("class", "bar-value")
+            .attr("x", d => left + x((d as BarChartRaceDatum).value) + 6)
+            .attr("y", d => top + (y((d as BarChartRaceDatum).name)! + y.bandwidth() / 2))
+            .attr("dy", "0.35em")
+            .attr("text-anchor", "start")
+            .attr("opacity", 0),
+          update => update,
+          exit => exit.remove()
+        )
+        .transition()
+        .duration(400)
         .attr("x", d => left + x((d as BarChartRaceDatum).value) + 6)
         .attr("y", d => top + (y((d as BarChartRaceDatum).name)! + y.bandwidth() / 2))
-        .attr("dy", "0.35em")
-        .attr("text-anchor", "start")
+        .attr("opacity", 1)
         .text(d => (d as BarChartRaceDatum).value)
         .style("font-size", "13px")
         .style("fill", "#075985");
 
-      // X Axis - Fix the TypeScript error by creating the axis group first
-      const xAxisGroup = svg
-        .selectAll<SVGGElement, number>(".x-axis")
-        .data([0])
-        .join(
-          enter => enter.append("g").attr("class", "x-axis"),
-          update => update,
-          exit => exit.remove()
-        )
-        .attr("transform", `translate(${left},${top + chartHeight})`);
+      // X Axis - Create or update the axis
+      let xAxisGroup = svg.select<SVGGElement>(".x-axis");
       
-      // Now call the axis on the properly typed group
+      if (xAxisGroup.empty()) {
+        xAxisGroup = svg
+          .append("g")
+          .attr("class", "x-axis")
+          .attr("transform", `translate(${left},${top + chartHeight})`);
+      } else {
+        xAxisGroup.attr("transform", `translate(${left},${top + chartHeight})`);
+      }
+      
       xAxisGroup.call(d3.axisBottom(x).ticks(5).tickSizeOuter(0) as any);
 
-      // Year label
-      svg
-        .selectAll(".year-label")
-        .data([year])
-        .join("text")
-        .attr("class", "year-label")
-        .attr("x", width / 2)
-        .attr("y", top - 8)
-        .attr("text-anchor", "middle")
-        .attr("font-size", 24)
-        .attr("font-weight", 600)
-        .style("fill", "#0f172a")
-        .text(year);
+      // Year label - Create or update
+      let yearLabel = svg.select(".year-label");
+      
+      if (yearLabel.empty()) {
+        yearLabel = svg
+          .append("text")
+          .attr("class", "year-label")
+          .attr("x", width / 2)
+          .attr("y", top - 8)
+          .attr("text-anchor", "middle")
+          .attr("font-size", 24)
+          .attr("font-weight", 600)
+          .style("fill", "#0f172a");
+      }
+      
+      yearLabel.text(year);
     }
 
-    let interval: any = null;
+    let interval: ReturnType<typeof setTimeout> | null = null;
     let stopped = false;
+    
     function animate() {
       draw(years[yearIdx]);
       yearIdx++;
       if (yearIdx < years.length && !stopped) {
         interval = setTimeout(animate, 1200);
+      } else if (yearIdx >= years.length) {
+        // Reset animation after completing
+        yearIdx = 0;
+        setTimeout(animate, 2000);
       }
     }
+    
+    // Start the animation
+    console.log("Starting BarChartRace animation");
     animate();
 
     return () => {
       stopped = true;
-      clearTimeout(interval);
+      if (interval) clearTimeout(interval);
     };
-    // eslint-disable-next-line
-  }, [data, width, height]);
+  }, [data, width, height, isMounted]);
 
   return (
     <svg
-      ref={ref}
+      ref={svgRef}
       width={width}
       height={height}
-      style={{ background: "#f0f6f9", borderRadius: "12px" }}
+      style={{ 
+        background: "#f0f6f9", 
+        borderRadius: "12px", 
+        overflow: "visible",
+        maxWidth: "100%"
+      }}
+      className="mx-auto"
     />
   );
 };

@@ -28,8 +28,10 @@ const demoData = [
 
 const BarChartRaceDemo = () => (
   <div className="my-8 max-w-full overflow-x-auto">
-    <BarChartRace data={demoData} width={560} height={300} />
-    <div className="text-xs text-center mt-2 text-slate-500">Animated D3 bar chart race demo</div>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      <BarChartRace data={demoData} width={560} height={300} />
+      <div className="text-xs text-center mt-2 text-slate-500">Animated D3 bar chart race demo</div>
+    </div>
   </div>
 );
 
@@ -104,18 +106,20 @@ const Post = () => {
                     </code>
                   );
                 },
-                p: ({ node, ...props }) => {
-                  const content = String(props.children);
-
-                  if (content.trim() === '<LineChartDemo />') {
-                    return <LineChartDemo />;
+                p: ({ node, children }) => {
+                  if (typeof children === 'string') {
+                    if (children.trim() === '<LineChartDemo />') {
+                      console.log("Rendering LineChartDemo");
+                      return <LineChartDemo />;
+                    }
+                    
+                    if (children.trim() === '<BarChartRaceDemo />') {
+                      console.log("Rendering BarChartRaceDemo");
+                      return <BarChartRaceDemo />;
+                    }
                   }
-                  
-                  if (content.trim() === '<BarChartRaceDemo />') {
-                    return <BarChartRaceDemo />;
-                  }
 
-                  return <p {...props} />;
+                  return <p>{children}</p>;
                 }
               }}
             >

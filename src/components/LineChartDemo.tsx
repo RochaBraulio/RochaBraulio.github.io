@@ -1,5 +1,6 @@
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import * as d3 from "d3";
 
 // Sample dataset for the line chart (Year vs Value)
 const data = [
@@ -18,86 +19,127 @@ interface LineChartDemoProps {
 }
 
 export const LineChartDemo: React.FC<LineChartDemoProps> = ({ width = 560, height = 320 }) => {
-  const ref = useRef<SVGSVGElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Only set mounted after initial render to ensure SSR compatibility
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
-    if (!ref.current) return;
+    if (!isMounted || !svgRef.current) return;
 
-    // Dynamically import D3 to avoid the import resolution issue
-    import('d3').then((d3Module) => {
-      const svg = d3Module.select(ref.current);
-      svg.selectAll("*").remove();
+    // Clear any existing content
+    const svg = d3.select(svgRef.current);
+    svg.selectAll("*").remove();
 
-      const margin = { top: 30, right: 40, bottom: 40, left: 50 };
-      const innerWidth = width - margin.left - margin.right;
-      const innerHeight = height - margin.top - margin.bottom;
+    const margin = { top: 30, right: 40, bottom: 40, left: 50 };
+    const innerWidth = width - margin.left - margin.right;
+    const innerHeight = height - margin.top - margin.bottom;
 
-      // Scale
-      const x = d3Module.scaleTime()
-        .domain(d3Module.extent(data, d => d.date) as [Date, Date])
-        .range([0, innerWidth]);
+    // Create scales
+    const x = d3.scaleTime()
+      .domain(d3.extent(data, d => d.date) as [Date, Date])
+      .range([0, innerWidth]);
 
-      const y = d3Module.scaleLinear()
-        .domain([0, d3Module.max(data, d => d.value)!])
-        .nice()
-        .range([innerHeight, 0]);
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.value) || 0])
+      .nice()
+      .range([innerHeight, 0]);
 
-      // Main group
-      const g = svg
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+    // Create the main group for margins
+    const g = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
-      // X Axis
-      g.append("g")
-        .attr("transform", `translate(0,${innerHeight})`)
-        .call(d3Module.axisBottom(x).ticks(width < 400 ? 4 : 7).tickFormat(d3Module.timeFormat("%Y") as any))
-        .attr("font-size", 12);
+    // Draw the x-axis
+    g.append("g")
+      .attr("transform", `translate(0,${innerHeight})`)
+      .call(d3.axisBottom(x).ticks(width < 400 ? 4 : 7))
+      .attr("font-size", "12px");
 
-      // Y Axis
-      g.append("g")
-        .call(d3Module.axisLeft(y).ticks(5))
-        .attr("font-size", 12);
+    // Draw the y-axis
+    g.append("g")
+      .call(d3.axisLeft(y).ticks(5))
+      .attr("font-size", "12px");
 
-      // Line
-      g.append("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "#2563eb")
-        .attr("stroke-width", 3)
-        .attr("d", d3Module.line<{ date: Date; value: number }>()
-          .x(d => x(d.date))
-          .y(d => y(d.value))
-        );
+    // Draw the line
+    const line = d3.line<{ date: Date; value: number }>()
+      .x(d => x(d.date))
+      .y(d => y(d.value));
 
-      // Circles for points
-      g.selectAll(".dot")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("cx", d => x(d.date))
-        .attr("cy", d => y(d.value))
-        .attr("r", 4)
-        .attr("fill", "#38bdf8")
-        .attr("stroke", "#0ea5e9")
-        .attr("stroke-width", 1.5);
+    g.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "#2563eb")
+      .attr("stroke-width", 3)
+      .attr("d", line);
 
-      // Tooltip interaction: basic (title tag on circles)
-      g.selectAll("circle")
-        .append("title")
-        .text((d) => {
-          const typedD = d as unknown as { date: Date; value: number };
-          return `${d3Module.timeFormat("%b %Y")(typedD.date)}: ${typedD.value}`;
-        });
-    }).catch(error => {
-      console.error("Failed to load D3:", error);
-    });
-  }, [width, height]);
+    // Add points
+    g.selectAll(".data-point")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "data-point")
+      .attr("cx", d => x(d.date))
+      .attr("cy", d => y(d.value))
+      .attr("r", 4)
+      .attr("fill", "#38bdf8")
+      .attr("stroke", "#0ea5e9")
+      .attr("stroke-width", 1.5)
+      .append("title")
+      .text(d => `${d.date.getFullYear()}: ${d.value}`);
+
+    // Add labels to axes
+    g.append("text")
+      .attr("class", "x-axis-label")
+      .attr("text-anchor", "middle")
+      .attr("x", innerWidth / 2)
+      .attr("y", innerHeight + 35)
+      .attr("fill", "currentColor")
+      .text("Year");
+
+    g.append("text")
+      .attr("class", "y-axis-label")
+      .attr("text-anchor", "middle")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -innerHeight / 2)
+      .attr("y", -35)
+      .attr("fill", "currentColor")
+      .text("Value");
+
+    // Add a chart title
+    svg.append("text")
+      .attr("class", "chart-title")
+      .attr("text-anchor", "middle")
+      .attr("x", width / 2)
+      .attr("y", 15)
+      .attr("font-size", "14px")
+      .attr("font-weight", "bold")
+      .attr("fill", "currentColor")
+      .text("Annual Data Trend");
+
+    console.log("LineChart D3 render complete");
+  }, [width, height, isMounted]);
 
   return (
     <div className="my-8 w-full overflow-x-auto">
-      <svg ref={ref} width={width} height={height} style={{ maxWidth: "100%", height: "auto" }} />
-      <div className="text-xs text-center mt-2 text-slate-500">
-        Interactive D3.js Line Chart Demo
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        <svg 
+          ref={svgRef} 
+          width={width} 
+          height={height} 
+          style={{ 
+            maxWidth: "100%", 
+            height: "auto",
+            overflow: "visible"
+          }}
+          className="mx-auto" 
+        />
+        <div className="text-xs text-center mt-2 text-slate-500">
+          Interactive D3.js Line Chart Demo
+        </div>
       </div>
     </div>
   );
