@@ -75,7 +75,7 @@ const Index = () => {
       <section className="py-6 bg-[#FCFBF8] dark:bg-[#0A0A0A]">
         <div className="container max-w-6xl">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold tracking-tight">Categories</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Browse by topics...</h2>
             <div className="flex items-center gap-4">
               <Select
                 value={sortBy}
@@ -118,7 +118,7 @@ const Index = () => {
               ? `Search Results for "${searchQuery}"` 
               : filterTag 
                 ? `Posts in "${filterTag}"` 
-                : "All Posts"}
+                : "... or explore all posts"}
           </h2>
           
           {displayedPosts.length === 0 ? (
