@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MDXProvider } from '@mdx-js/react';
@@ -150,34 +151,62 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
     const elements: React.ReactNode[] = [];
     
     let currentParagraph: string[] = [];
+    let inCodeBlock = false;
+    let codeContent: string[] = [];
+    let codeLanguage = '';
     
     lines.forEach((line, index) => {
+      // Check for code block start/end
+      if (line.trim().startsWith('```')) {
+        if (!inCodeBlock) {
+          // Start of code block
+          if (currentParagraph.length > 0) {
+            elements.push(<p key={`p-${index}`} className="mb-4">{currentParagraph.join(' ')}</p>);
+            currentParagraph = [];
+          }
+          inCodeBlock = true;
+          codeContent = [];
+          // Extract language if specified
+          codeLanguage = line.trim().substring(3).trim();
+        } else {
+          // End of code block
+          inCodeBlock = false;
+          elements.push(
+            <CodeBlock 
+              key={`code-${index}`}
+              language={codeLanguage || 'text'}
+              value={codeContent.join('\n')}
+            />
+          );
+        }
+        return;
+      }
+
+      if (inCodeBlock) {
+        // Inside a code block, collect content
+        codeContent.push(line);
+        return;
+      }
+      
       if (line.startsWith('# ')) {
         if (currentParagraph.length > 0) {
-          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
+          elements.push(<p key={`p-${index}`} className="mb-4">{currentParagraph.join(' ')}</p>);
           currentParagraph = [];
         }
         elements.push(<h1 key={`h1-${index}`} className="text-3xl font-bold mt-6 mb-4">{line.substring(2)}</h1>);
       } else if (line.startsWith('## ')) {
         if (currentParagraph.length > 0) {
-          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
+          elements.push(<p key={`p-${index}`} className="mb-4">{currentParagraph.join(' ')}</p>);
           currentParagraph = [];
         }
         elements.push(<h2 key={`h2-${index}`} className="text-2xl font-semibold mt-6 mb-3">{line.substring(3)}</h2>);
       } else if (line.startsWith('### ')) {
         if (currentParagraph.length > 0) {
-          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
+          elements.push(<p key={`p-${index}`} className="mb-4">{currentParagraph.join(' ')}</p>);
           currentParagraph = [];
         }
         elements.push(<h3 key={`h3-${index}`} className="text-xl font-medium mt-5 mb-2">{line.substring(4)}</h3>);
       } 
-      else if (line.startsWith('```')) {
-        if (currentParagraph.length > 0) {
-          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
-          currentParagraph = [];
-        }
-        elements.push(<pre key={`pre-${index}`} className="bg-gray-100 dark:bg-gray-800 p-4 rounded my-4"><code>{line}</code></pre>);
-      }
       else if (line.trim() === '') {
         if (currentParagraph.length > 0) {
           elements.push(<p key={`p-${index}`} className="mb-4">{currentParagraph.join(' ')}</p>);
@@ -186,7 +215,7 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
       } 
       else if (line.trim().startsWith('- ')) {
         if (currentParagraph.length > 0) {
-          elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
+          elements.push(<p key={`p-${index}`} className="mb-4">{currentParagraph.join(' ')}</p>);
           currentParagraph = [];
         }
         elements.push(<li key={`li-${index}`} className="ml-6 list-disc">{line.trim().substring(2)}</li>);
@@ -196,8 +225,20 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
       }
     });
     
+    // Handle any remaining paragraph content
     if (currentParagraph.length > 0) {
       elements.push(<p key="final-p" className="mb-4">{currentParagraph.join(' ')}</p>);
+    }
+    
+    // If we ended the file in a code block (missing closing backticks), close it
+    if (inCodeBlock && codeContent.length > 0) {
+      elements.push(
+        <CodeBlock 
+          key="final-code"
+          language={codeLanguage || 'text'}
+          value={codeContent.join('\n')}
+        />
+      );
     }
     
     return <div className="markdown-content">{elements}</div>;
@@ -276,3 +317,4 @@ const Post = () => {
 };
 
 export default Post;
+
