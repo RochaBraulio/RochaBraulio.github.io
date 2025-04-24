@@ -3,58 +3,122 @@ import { BlogPost } from "@/utils/blogData";
 
 const post: BlogPost = {
   id: "8",
-  title: "Using Python for G-code Generation",
-  date: "2025-03-28",
-  author: "3D Print Master",
-  excerpt: "Learn how to generate and modify G-code programmatically using Python.",
+  title: "Git Workflow Best Practices",
+  date: "2024-11-05",
+  excerpt: "Master Git with these workflow best practices for efficient team collaboration.",
   content: `
-# Using Python for G-code Generation
+# Git Workflow Best Practices
 
-G-code is the language of 3D printers, and Python can help us generate and modify it programmatically. Let's explore how to create custom G-code for special printing needs.
+Effective Git workflows can significantly improve team productivity and code quality.
 
-## Basic G-code Structure
+## Branch Naming Conventions
 
-G-code consists of commands like:
-- G1: Linear move
-- G28: Home axes
-- M104: Set extruder temperature
-- M140: Set bed temperature
+Use descriptive branch names that indicate the type of work and reference issue trackers:
 
-## Python Implementation
-
-\`\`\`python
-class GCodeGenerator:
-    def __init__(self):
-        self.commands = []
-        
-    def add_home_all(self):
-        self.commands.append("G28 ; Home all axes")
-        
-    def add_move(self, x=None, y=None, z=None, e=None, f=None):
-        command = "G1"
-        if x is not None: command += f" X{x}"
-        if y is not None: command += f" Y{y}"
-        if z is not None: command += f" Z{z}"
-        if e is not None: command += f" E{e}"
-        if f is not None: command += f" F{f}"
-        self.commands.append(command)
-        
-    def save_to_file(self, filename):
-        with open(filename, 'w') as f:
-            f.write('\\n'.join(self.commands))
-
-# Usage example
-generator = GCodeGenerator()
-generator.add_home_all()
-generator.add_move(x=100, y=100, z=0.2, f=3000)
-generator.save_to_file('custom_print.gcode')
+\`\`\`
+feature/user-authentication
+bugfix/login-validation
+hotfix/security-vulnerability
+docs/api-documentation
+refactor/payment-system
 \`\`\`
 
-Remember to always validate generated G-code before sending it to your printer!
+## Commit Messages
+
+Write clear, concise commit messages:
+
+\`\`\`
+# Bad
+fix stuff
+
+# Good
+fix: resolve memory leak in user authentication service
+
+Body: The user authentication service was not properly releasing database
+connections, causing resource exhaustion after prolonged use.
+
+Closes #123
+\`\`\`
+
+## Git Flow
+
+Git Flow is a branching model with structured branches:
+
+- **main**: Production-ready code
+- **develop**: Integration branch for features
+- **feature/\***: New features
+- **release/\***: Preparing for a release
+- **hotfix/\***: Emergency fixes for production
+
+Example workflow:
+
+\`\`\`bash
+# Start a feature
+git checkout develop
+git checkout -b feature/user-authentication
+
+# Work on your feature with multiple commits
+git add .
+git commit -m "feat: implement user registration form"
+git add .
+git commit -m "feat: add form validation"
+
+# Complete the feature
+git checkout develop
+git merge --no-ff feature/user-authentication
+git push origin develop
+
+# Prepare a release
+git checkout -b release/1.0.0 develop
+# Make final adjustments and version bumps
+git checkout main
+git merge --no-ff release/1.0.0
+git tag -a v1.0.0 -m "Version 1.0.0"
+git checkout develop
+git merge --no-ff release/1.0.0
+\`\`\`
+
+## Pull Requests
+
+Use pull requests for code review:
+
+1. Create a feature branch
+2. Make your changes
+3. Push to the remote repository
+4. Open a pull request
+5. Get feedback and iterate
+6. Merge when approved
+
+## Rebasing vs. Merging
+
+**Merging** preserves history but can clutter the timeline:
+
+\`\`\`bash
+git checkout develop
+git merge feature/user-authentication
+\`\`\`
+
+**Rebasing** creates a cleaner history but rewrites commits:
+
+\`\`\`bash
+git checkout feature/user-authentication
+git rebase develop
+git checkout develop
+git merge feature/user-authentication
+\`\`\`
+
+## CI/CD Integration
+
+Integrate Git with CI/CD pipelines:
+
+1. Push code triggers automated tests
+2. Successful tests allow merging to develop
+3. Merges to main trigger deployment
+
+By following these best practices, you'll create an efficient Git workflow that helps your team collaborate effectively.
   `,
-  coverImage: "https://images.unsplash.com/photo-1587613865763-4b8b0d19e8ab",
-  tags: ["Python", "3D Printing", "G-code"],
-  views: 432
+  coverImage: "https://images.unsplash.com/photo-1556075798-4825dfaaf498",
+  tags: ["Git", "Version Control", "Development"]
 };
 
 export default post;

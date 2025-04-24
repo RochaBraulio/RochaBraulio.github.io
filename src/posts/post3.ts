@@ -3,91 +3,158 @@ import { BlogPost } from "@/utils/blogData";
 
 const post: BlogPost = {
   id: "3",
-  title: "Visualizing Complex Data: Best Practices and Tools",
-  date: "2025-04-15",
-  author: "Data Enthusiast",
-  excerpt: "Learn how to create effective visualizations that communicate complex data insights clearly.",
+  title: "Building a RESTful API with Node.js and Express",
+  date: "2024-06-10",
+  excerpt: "A comprehensive guide to creating a RESTful API using Node.js and Express.",
   content: `
-# Visualizing Complex Data: Best Practices and Tools
+# Building a RESTful API with Node.js and Express
 
-Data visualization is the graphical representation of information and data. These visual elements make it easier to identify trends, patterns, and outliers in large datasets.
+Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
 
-## Principles of Effective Data Visualization
+## Setting Up Your Project
 
-### 1. Know Your Audience
+First, initialize your project:
 
-Different audiences require different levels of detail and complexity:
-
-- **Technical audience**: Can handle more complex visualizations
-- **Executive audience**: Needs clear, actionable insights
-- **General public**: Requires intuitive, simplified visuals
-
-### 2. Choose the Right Visualization Type
-
-Different data types call for different visualization methods:
-
-- **Categorical comparisons**: Bar charts, pie charts
-- **Time series**: Line charts, area charts
-- **Distributions**: Histograms, box plots
-- **Correlations**: Scatter plots, heat maps
-- **Hierarchical data**: Treemaps, sunburst diagrams
-- **Networks**: Node-link diagrams, adjacency matrices
-
-### 3. Focus on Clarity
-
-- Remove chart junk (unnecessary elements)
-- Use color purposefully
-- Label directly when possible
-- Include a clear title and legend
-
-## Python Visualization Libraries
-
-\`\`\`python
-# Matplotlib - The foundation
-import matplotlib.pyplot as plt
-
-plt.figure(figsize=(10, 6))
-plt.plot(x_data, y_data)
-plt.title('Basic Line Chart')
-plt.xlabel('X Axis')
-plt.ylabel('Y Axis')
-plt.show()
-
-# Seaborn - Statistical visualizations
-import seaborn as sns
-
-sns.set_theme(style="whitegrid")
-sns.boxplot(x="category", y="value", data=df)
-
-# Plotly - Interactive visualizations
-import plotly.express as px
-
-fig = px.scatter(df, x="x_values", y="y_values", 
-                 color="category", size="size_values",
-                 hover_name="labels")
-fig.show()
+\`\`\`javascript
+mkdir my-api
+cd my-api
+npm init -y
+npm install express mongoose dotenv
 \`\`\`
 
-## Advanced Techniques
+## Creating the Server
 
-### Interactive Dashboards
+Create an \`index.js\` file:
 
-Tools like Tableau, Power BI, or Dash allow you to create interactive dashboards where users can explore the data themselves.
+\`\`\`javascript
+const express = require('express');
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-### Storytelling with Data
+// Initialize express
+const app = express();
 
-The most effective visualizations tell a story:
+// Middleware
+app.use(express.json());
 
-1. Start with a clear narrative
-2. Guide the viewer through the data
-3. Highlight key insights
-4. Provide context and implications
+// Routes
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 
-Remember, the goal of data visualization is not to create the most complex or impressive-looking chart, but to communicate insights clearly and effectively.
-  `,
-  coverImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
-  tags: ["Data Visualization", "Python", "Tools"],
-  views: 1432
+// User routes
+const userRoutes = require('./routes/users');
+app.use('/api/users', userRoutes);
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Could not connect to MongoDB', err));
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(\`Server running on port \${PORT}\`));
+\`\`\`
+
+## Creating Models
+
+Create a User model in \`models/User.js\`:
+
+\`\`\`javascript
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 3,
+    maxlength: 50
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    minlength: 5,
+    maxlength: 255
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 1024
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+module.exports = mongoose.model('User', userSchema);
+\`\`\`
+
+## Creating Routes
+
+Create routes in \`routes/users.js\`:
+
+\`\`\`javascript
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User');
+
+// Get all users
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.find().select('-password');
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Get one user
+router.get('/:id', getUser, (req, res) => {
+  res.json(res.user);
+});
+
+// Create a user
+router.post('/', async (req, res) => {
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password
+  });
+
+  try {
+    const newUser = await user.save();
+    res.status(201).json(newUser);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Middleware function to get user by ID
+async function getUser(req, res, next) {
+  let user;
+  try {
+    user = await User.findById(req.params.id).select('-password');
+    if (user == null) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+
+  res.user = user;
+  next();
+}
+
+module.exports = router;
+\`\`\`
+
+Now you have a basic RESTful API with CRUD operations!
+`,
+  coverImage: "https://images.unsplash.com/photo-1561736778-92e52a7769ef",
+  tags: ["Node.js", "Express", "API"]
 };
 
 export default post;

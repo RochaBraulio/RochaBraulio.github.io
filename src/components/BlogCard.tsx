@@ -65,4 +65,3 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
     </Card>
   );
 }
-

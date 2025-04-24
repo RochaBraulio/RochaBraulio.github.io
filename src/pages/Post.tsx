@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MDXProvider } from '@mdx-js/react';
@@ -156,20 +155,16 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
     let codeLanguage = '';
     
     lines.forEach((line, index) => {
-      // Check for code block start/end
       if (line.trim().startsWith('```')) {
         if (!inCodeBlock) {
-          // Start of code block
           if (currentParagraph.length > 0) {
             elements.push(<p key={`p-${index}`} className="mb-4">{currentParagraph.join(' ')}</p>);
             currentParagraph = [];
           }
           inCodeBlock = true;
           codeContent = [];
-          // Extract language if specified
           codeLanguage = line.trim().substring(3).trim();
         } else {
-          // End of code block
           inCodeBlock = false;
           elements.push(
             <CodeBlock 
@@ -183,7 +178,6 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
       }
 
       if (inCodeBlock) {
-        // Inside a code block, collect content
         codeContent.push(line);
         return;
       }
@@ -225,12 +219,10 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
       }
     });
     
-    // Handle any remaining paragraph content
     if (currentParagraph.length > 0) {
       elements.push(<p key="final-p" className="mb-4">{currentParagraph.join(' ')}</p>);
     }
     
-    // If we ended the file in a code block (missing closing backticks), close it
     if (inCodeBlock && codeContent.length > 0) {
       elements.push(
         <CodeBlock 
@@ -317,4 +309,3 @@ const Post = () => {
 };
 
 export default Post;
-

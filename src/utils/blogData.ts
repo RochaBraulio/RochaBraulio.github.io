@@ -36,3 +36,9 @@ export const getCategories = (): { name: string; count: number }[] => {
   
   return Array.from(categoryMap.entries()).map(([name, count]) => ({ name, count }));
 };
+
+// Added dummy function to fix import in Post.tsx
+export const trackPageView = (id: string): void => {
+  // This function is a placeholder since view tracking was removed
+  console.log(`Post ${id} viewed`);
+};

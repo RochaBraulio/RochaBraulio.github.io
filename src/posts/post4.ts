@@ -3,101 +3,84 @@ import { BlogPost } from "@/utils/blogData";
 
 const post: BlogPost = {
   id: "4",
-  title: "Troubleshooting Common 3D Printing Issues",
-  date: "2025-04-10",
-  author: "3D Print Master",
-  excerpt: "Solutions for the most common problems you'll encounter with your 3D printer.",
+  title: "Understanding CSS Grid Layout",
+  date: "2024-07-22",
+  excerpt: "Master CSS Grid Layout for modern web design with this comprehensive guide.",
   content: `
-# Troubleshooting Common 3D Printing Issues
+# Understanding CSS Grid Layout
 
-Even the most experienced 3D printing enthusiasts encounter issues. Here's how to diagnose and fix the most common problems.
+CSS Grid Layout is a two-dimensional layout system designed for the web, allowing us to create complex responsive web layouts more easily.
 
-## Layer Adhesion Problems
+## Basic Terminology
 
-### Symptom: Layers Separating or Visible Lines
+- Grid Container: The element with `display: grid` applied.
+- Grid Item: The direct children of the grid container.
+- Grid Line: The dividing lines that make up the grid structure.
+- Grid Track: The space between two adjacent grid lines (rows or columns).
+- Grid Cell: The intersection of a row and a column.
+- Grid Area: The total space surrounded by four grid lines.
 
-**Causes and Solutions:**
+## Creating a Simple Grid
 
-1. **Temperature too low**
-   - Increase nozzle temperature by 5-10°C increments
-   - PLA: Try 200-220°C
-   - PETG: Try 230-250°C
-   - ABS: Try 230-250°C
-
-2. **Printing too fast**
-   - Reduce print speed by 10-20%
-   - Try 30-50mm/s for better layer adhesion
-
-3. **Cooling too aggressive**
-   - Reduce fan speed for better layer bonding
-   - For materials like ABS, consider turning the fan off entirely
-
-## Stringing or Oozing
-
-### Symptom: Thin strands of plastic between parts
-
-**Causes and Solutions:**
-
-\`\`\`
-// Retraction settings in slicer
-retraction_distance = 5;  // mm, increase if still stringing
-retraction_speed = 45;    // mm/s, faster for less oozing
-retraction_minimum_travel = 1.5;  // mm, don't retract for tiny moves
+\`\`\`css
+.container {
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+  grid-template-rows: 100px 100px;
+  gap: 10px;
+}
 \`\`\`
 
-1. **Enable or increase retraction**
-   - Start with 5mm for Bowden setups, 1-2mm for direct drive
-   - Increase retraction speed to 40-60mm/s
+## The FR Unit
 
-2. **Lower temperature**
-   - Reduce by 5-10°C to minimize oozing
-   - Find the lowest temperature that still gives good layer adhesion
+The fr unit represents a fraction of the available space:
 
-3. **Enable combing**
-   - This setting makes travel moves stay within already printed areas
+\`\`\`css
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 10px;
+}
+\`\`\`
 
-## Under-extrusion
+## Grid Areas
 
-### Symptom: Gaps between lines, thin layers, or incomplete parts
+Grid areas allow you to name specific areas of your grid:
 
-**Causes and Solutions:**
+\`\`\`css
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "header header header header"
+    "sidebar main main main"
+    "footer footer footer footer";
+  gap: 10px;
+}
 
-1. **Clogged nozzle**
-   - Perform a "cold pull" or "atomic pull" with nylon or cleaning filament
-   - Replace the nozzle if cleaning doesn't work
+.header { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.main { grid-area: main; }
+.footer { grid-area: footer; }
+\`\`\`
 
-2. **Incorrect flow rate**
-   - Calibrate your extruder steps per mm
-   - Increase flow rate by 5-10% increments
+## Auto-Fill and Auto-Fit
 
-3. **Filament issues**
-   - Check for tangled filament or high friction in the filament path
-   - Dry your filament if it has absorbed moisture
+Create flexible layouts that adjust based on viewport size:
 
-## First Layer Problems
+\`\`\`css
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+\`\`\`
 
-### Symptom: First layer not sticking or uneven
-
-**Causes and Solutions:**
-
-1. **Bed leveling**
-   - Re-level your bed using the paper method or use auto-leveling
-   - Adjust Z-offset in tiny increments
-
-2. **Bed temperature**
-   - PLA: 50-60°C
-   - PETG: 70-80°C
-   - ABS: 100-110°C
-
-3. **Surface preparation**
-   - Clean with isopropyl alcohol
-   - Apply adhesives like glue stick, hairspray, or specialized solutions
-
-Remember, persistence is key in 3D printing troubleshooting. Keep detailed notes of what works and what doesn't for your specific printer and materials.
-  `,
-  coverImage: "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6",
-  tags: ["3D Printing", "Troubleshooting", "Tips"],
-  views: 1876
+CSS Grid is now well-supported across modern browsers, making it an excellent choice for layout design.
+`,
+  coverImage: "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2",
+  tags: ["CSS", "Web Design", "Frontend"]
 };
 
 export default post;

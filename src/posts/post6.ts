@@ -3,58 +3,117 @@ import { BlogPost } from "@/utils/blogData";
 
 const post: BlogPost = {
   id: "6",
-  title: "Machine Learning in 3D Printing: Predicting Print Failures",
-  date: "2025-04-05",
-  author: "Data Enthusiast",
-  excerpt: "How machine learning can help predict and prevent 3D printing failures before they happen.",
+  title: "Machine Learning Basics with Python",
+  date: "2024-09-12",
+  excerpt: "An introduction to machine learning concepts and implementation using Python and popular libraries.",
   content: `
-# Machine Learning in 3D Printing: Predicting Print Failures
+# Machine Learning Basics with Python
 
-Machine learning is revolutionizing the way we approach 3D printing, particularly in predicting and preventing print failures. Let's explore how AI can improve print success rates.
+This guide introduces fundamental machine learning concepts and how to implement them using Python.
 
-## Common Print Failures
+## Setting Up Your Environment
 
-1. Layer separation
-2. Warping
-3. Stringing
-4. Under-extrusion
-5. Over-extrusion
+First, set up your Python environment with the necessary libraries:
 
-## How Machine Learning Helps
-
-Machine learning models can analyze real-time printer data to detect potential issues before they cause print failures. Key data points include:
-
-- Nozzle temperature variations
-- Bed temperature consistency
-- Extrusion rates
-- Print head movement patterns
-
-## Implementation Example
-
-\`\`\`python
-import tensorflow as tf
-import numpy as np
-
-def create_print_monitor_model():
-    model = tf.keras.Sequential([
-        tf.keras.layers.Dense(64, activation='relu', input_shape=(12,)),
-        tf.keras.layers.Dropout(0.2),
-        tf.keras.layers.Dense(32, activation='relu'),
-        tf.keras.layers.Dense(1, activation='sigmoid')
-    ])
-    return model
-
-# Train the model
-model.compile(optimizer='adam',
-             loss='binary_crossentropy',
-             metrics=['accuracy'])
+\`\`\`bash
+pip install numpy pandas matplotlib scikit-learn
 \`\`\`
 
-Remember, the key to successful implementation is having good training data from both successful and failed prints.
+## Data Preparation
+
+Before applying machine learning algorithms, you need to prepare your data:
+
+\`\`\`python
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Load data
+data = pd.read_csv('your_dataset.csv')
+
+# Split features and target
+X = data.drop('target', axis=1)
+y = data['target']
+
+# Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Standardize features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+\`\`\`
+
+## Linear Regression
+
+Let's implement a simple linear regression model:
+
+\`\`\`python
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Create and train the model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f'Mean Squared Error: {mse}')
+print(f'R² Score: {r2}')
+\`\`\`
+
+## Classification with Random Forest
+
+For classification tasks, random forests work well:
+
+\`\`\`python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+# Create and train the model
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+
+# Make predictions
+y_pred = clf.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+report = classification_report(y_test, y_pred)
+
+print(f'Accuracy: {accuracy}')
+print(f'Classification Report:\n{report}')
+\`\`\`
+
+## Visualizing Results
+
+Visualization helps understand your model's performance:
+
+\`\`\`python
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+
+# Plot confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.title('Confusion Matrix')
+plt.show()
+\`\`\`
+
+This is just the beginning of your machine learning journey!
   `,
-  coverImage: "https://images.unsplash.com/photo-1544819667-9bfc1de23d4e",
-  tags: ["Machine Learning", "3D Printing", "Python"],
-  views: 567
+  coverImage: "https://images.unsplash.com/photo-1527474305487-b87b222841cc",
+  tags: ["Python", "Machine Learning", "Data Science"]
 };
 
 export default post;

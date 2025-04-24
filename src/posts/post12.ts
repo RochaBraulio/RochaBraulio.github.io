@@ -1,42 +1,166 @@
 
 import { BlogPost } from "@/utils/blogData";
-import { Svg } from "@/components/Svg";
 
 const post: BlogPost = {
   id: "12",
-  title: "Simple SVG Border Example",
-  date: "2025-04-23",
-  author: "Viz Example",
-  excerpt: "A simple demonstration of an SVG with a gold border.",
+  title: "Introduction to SwiftUI",
+  date: "2025-05-01",
+  excerpt: "Learn how to build beautiful user interfaces for Apple platforms with SwiftUI.",
   content: `
-# SVG Border Demo
+# Introduction to SwiftUI
 
-Here's a simple SVG with a gold border:
+SwiftUI is Apple's modern UI framework for building user interfaces across all Apple platforms using Swift and a declarative syntax.
 
-<Svg />
+## Getting Started
 
-This is a basic example of rendering an SVG component directly in a blog post.
+First, make sure you have Xcode 11 or later installed. Create a new SwiftUI project:
 
-Here's another SVG with a different border:
+1. Open Xcode
+2. File > New > Project
+3. Select "App" under iOS, macOS, or watchOS
+4. Check "SwiftUI" for the interface
 
-<Svg width={400} height={150} borderColor="purple" borderWidth={3} />
+## Basic UI Elements
 
-## Key Features
+Here's a simple "Hello, World!" view:
 
-- Simple SVG rendering
-- Custom border colors
-- Custom dimensions
-- Minimal code
+\`\`\`swift
+import SwiftUI
 
-Try viewing the SVGs above!
+struct ContentView: View {
+    var body: some View {
+        Text("Hello, World!")
+            .font(.largeTitle)
+            .foregroundColor(.blue)
+            .padding()
+    }
+}
 
----
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+\`\`\`
+
+## Layout with Stacks
+
+SwiftUI uses stacks for layout:
+
+\`\`\`swift
+VStack(alignment: .leading, spacing: 20) {
+    Text("Header")
+        .font(.headline)
+    
+    HStack {
+        Text("Item")
+        Spacer()
+        Text("Value")
+    }
+    
+    HStack {
+        Text("Another Item")
+        Spacer()
+        Text("Another Value")
+    }
+}
+.padding()
+\`\`\`
+
+## State and Binding
+
+SwiftUI uses property wrappers to manage state:
+
+\`\`\`swift
+struct CounterView: View {
+    @State private var count = 0
+    
+    var body: some View {
+        VStack {
+            Text("Count: \\(count)")
+                .font(.title)
+            
+            Button("Increment") {
+                count += 1
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+        }
+        .padding()
+    }
+}
+\`\`\`
+
+## Lists and Navigation
+
+Creating lists with navigation:
+
+\`\`\`swift
+struct Item: Identifiable {
+    let id = UUID()
+    let name: String
+    let description: String
+}
+
+struct ListView: View {
+    let items = [
+        Item(name: "Item 1", description: "Description for item 1"),
+        Item(name: "Item 2", description: "Description for item 2"),
+        Item(name: "Item 3", description: "Description for item 3")
+    ]
+    
+    var body: some View {
+        NavigationView {
+            List(items) { item in
+                NavigationLink(destination: DetailView(item: item)) {
+                    Text(item.name)
+                }
+            }
+            .navigationTitle("Items")
+        }
+    }
+}
+
+struct DetailView: View {
+    let item: Item
+    
+    var body: some View {
+        VStack {
+            Text(item.name)
+                .font(.title)
+            Text(item.description)
+                .padding()
+        }
+        .navigationTitle(item.name)
+    }
+}
+\`\`\`
+
+## Animations
+
+SwiftUI makes animations simple:
+
+\`\`\`swift
+struct AnimationView: View {
+    @State private var scale: CGFloat = 1.0
+    
+    var body: some View {
+        Button("Animate") {
+            withAnimation(.spring()) {
+                scale = scale == 1.0 ? 2.0 : 1.0
+            }
+        }
+        .scaleEffect(scale)
+    }
+}
+\`\`\`
+
+SwiftUI provides a powerful, modern approach to UI development that makes it easier than ever to create beautiful, dynamic interfaces for Apple platforms.
   `,
-  coverImage:
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-  tags: ["SVG", "React", "Simple Component"],
-  views: 0,
-  components: { Svg }, // Add the components that will be used in this post
+  coverImage: "https://images.unsplash.com/photo-1621839673705-6617adf9e890",
+  tags: ["SwiftUI", "iOS", "Apple"]
 };
 
 export default post;
