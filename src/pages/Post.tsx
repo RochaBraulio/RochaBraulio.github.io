@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MDXProvider } from '@mdx-js/react';
@@ -16,7 +15,6 @@ import { BarChartRace } from "@/components/BarChartRace";
 import { LineChartDemo } from "@/components/LineChartDemo";
 import { Svg } from "@/components/Svg";
 
-// Default components that will be available in all MDX content
 const defaultComponents = {
   Svg,
   StlViewer,
@@ -26,13 +24,11 @@ const defaultComponents = {
   code: ({ className, children, ...props }: any) => {
     const match = /language-(\w+)/.exec(className || '');
     
-    // Handle STL file rendering
     if (match && match[1] === 'stl') {
       const stlUrl = String(children).trim();
       return <StlViewer url={stlUrl} />;
     }
 
-    // Handle basic shapes
     if (match && match[1] === 'shape-cube') {
       return <StlViewer shape="cube" />;
     }
@@ -71,13 +67,11 @@ interface MDXContentProps {
   components?: Record<string, React.ComponentType<any>>;
 }
 
-// Simplified MDXContent component to directly render custom components or markdown content
 const MDXContent = ({ content, components = {} }: MDXContentProps) => {
   const [renderedContent, setRenderedContent] = React.useState<React.ReactNode>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    // Check for special content that should be handled differently
     if (content.includes("D3 Bar Chart Race")) {
       setRenderedContent(
         <div className="py-8">
@@ -89,24 +83,19 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
       return;
     }
 
-    // For regular MDX content, use a simpler approach
     async function renderContent() {
       try {
-        // Use a simple regex to identify component tags
         const componentRegex = /<(\w+)(?:\s+[^>]*)?(?:\/?>|>.*?<\/\1>)/g;
         const matches = [...content.matchAll(componentRegex)];
         
-        // Check if we have any of our custom components in the content
         const hasCustomComponents = matches.some(match => {
           const componentName = match[1];
           return components[componentName] || defaultComponents[componentName];
         });
         
         if (hasCustomComponents) {
-          // Manually render known components
           let processedContent = content;
           
-          // Handle the BarChartRace component
           if (processedContent.includes("<BarChartRace")) {
             setRenderedContent(
               <div>
@@ -118,7 +107,6 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
             return;
           }
           
-          // Handle the LineChartDemo component
           if (processedContent.includes("<LineChartDemo")) {
             setRenderedContent(
               <div>
@@ -130,7 +118,6 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
             return;
           }
           
-          // Handle the Svg component
           if (processedContent.includes("<Svg")) {
             setRenderedContent(
               <div>
@@ -146,7 +133,6 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
           }
         }
         
-        // For regular markdown without custom components
         setRenderedContent(processMarkdown(content));
         setIsLoading(false);
       } catch (error) {
@@ -159,7 +145,6 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
     renderContent();
   }, [content, components]);
 
-  // Simple markdown processing function
   const processMarkdown = (markdown: string) => {
     const lines = markdown.split('\n');
     const elements: React.ReactNode[] = [];
@@ -167,7 +152,6 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
     let currentParagraph: string[] = [];
     
     lines.forEach((line, index) => {
-      // Handle headings
       if (line.startsWith('# ')) {
         if (currentParagraph.length > 0) {
           elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
@@ -187,23 +171,19 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
         }
         elements.push(<h3 key={`h3-${index}`} className="text-xl font-medium mt-5 mb-2">{line.substring(4)}</h3>);
       } 
-      // Handle code blocks
       else if (line.startsWith('```')) {
         if (currentParagraph.length > 0) {
           elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
           currentParagraph = [];
         }
-        // We'll handle this very simply for now
         elements.push(<pre key={`pre-${index}`} className="bg-gray-100 dark:bg-gray-800 p-4 rounded my-4"><code>{line}</code></pre>);
       }
-      // Handle empty lines as paragraph breaks
       else if (line.trim() === '') {
         if (currentParagraph.length > 0) {
           elements.push(<p key={`p-${index}`} className="mb-4">{currentParagraph.join(' ')}</p>);
           currentParagraph = [];
         }
       } 
-      // Handle list items
       else if (line.trim().startsWith('- ')) {
         if (currentParagraph.length > 0) {
           elements.push(<p key={`p-${index}`}>{currentParagraph.join(' ')}</p>);
@@ -211,13 +191,11 @@ const MDXContent = ({ content, components = {} }: MDXContentProps) => {
         }
         elements.push(<li key={`li-${index}`} className="ml-6 list-disc">{line.trim().substring(2)}</li>);
       }
-      // Handle normal text
       else {
         currentParagraph.push(line);
       }
     });
     
-    // Add any remaining paragraph text
     if (currentParagraph.length > 0) {
       elements.push(<p key="final-p" className="mb-4">{currentParagraph.join(' ')}</p>);
     }
@@ -241,7 +219,6 @@ const Post = () => {
 
   useEffect(() => {
     if (id && post) {
-      console.log(`Viewed post: ${id}`);
       trackPageView(id);
     }
   }, [id, post]);
@@ -272,7 +249,6 @@ const Post = () => {
     );
   }
 
-  // Combine the default components with any post-specific components
   const mdxComponents = { ...defaultComponents, ...(post.components || {}) };
 
   return (

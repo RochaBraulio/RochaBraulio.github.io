@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -43,12 +44,14 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
           <CardFooter className="p-0 flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap gap-2">
               {tags.map(tag => (
-                <Badge key={tag} variant="secondary" className="rounded-full font-light px-4">
+                <Badge key={tag} variant="secondary" className="rounded-full px-4 py-1 text-sm font-light">
                   {tag}
                 </Badge>
               ))}
             </div>
-            <div className="text-xs text-muted-foreground font-light">{views} views</div>
+            <div className="text-xs text-muted-foreground font-light">
+              {views.toLocaleString()} {views === 1 ? 'view' : 'views'}
+            </div>
           </CardFooter>
         </div>
 
