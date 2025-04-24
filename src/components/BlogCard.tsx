@@ -44,7 +44,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
           <CardFooter className="p-0">
             <div className="flex flex-wrap gap-2">
               {tags.map(tag => (
-                <Badge key={tag} variant="secondary" className="rounded-full px-4 py-1 text-sm font-light">
+                <Badge key={tag} variant="secondary" className="rounded-full font-light px-4">
                   {tag}
                 </Badge>
               ))}
@@ -65,3 +65,4 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
     </Card>
   );
 }
+

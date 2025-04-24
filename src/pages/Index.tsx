@@ -11,7 +11,7 @@ const POSTS_PER_PAGE = 5;
 
 const Index = () => {
   const [filterTag, setFilterTag] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<"date" | "popularity">("date");
+  const [sortBy, setSortBy] = useState<"date">("date");
   const [showAllPosts, setShowAllPosts] = useState(false);
   const categories = getCategories();
   
@@ -22,9 +22,6 @@ const Index = () => {
     : searchResults;
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
-    if (sortBy === "popularity") {
-      return b.views - a.views;
-    }
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
@@ -79,14 +76,13 @@ const Index = () => {
             <div className="flex items-center gap-4">
               <Select
                 value={sortBy}
-                onValueChange={(value: "date" | "popularity") => setSortBy(value)}
+                onValueChange={(value: "date") => setSortBy(value)}
               >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="date">Most Recent</SelectItem>
-                  <SelectItem value="popularity">Most Popular</SelectItem>
                 </SelectContent>
               </Select>
               {filterTag && (

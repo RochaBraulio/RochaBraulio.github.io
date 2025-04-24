@@ -1,11 +1,9 @@
-
 import { BlogPost } from "@/utils/blogData";
 
 const post: BlogPost = {
   id: "10",
   title: "3D Printing with Recycled Materials",
   date: "2025-03-20",
-  author: "3D Print Master",
   excerpt: "A guide to using recycled materials in your 3D printing projects while maintaining print quality.",
   content: `
 # 3D Printing with Recycled Materials
@@ -50,8 +48,7 @@ const recycledPLASettings = {
 Remember to always test new materials with simple prints first!
   `,
   coverImage: "https://images.unsplash.com/photo-1567860140508-a4557bdb123b",
-  tags: ["3D Printing", "Sustainability", "Materials"],
-  views: 654
+  tags: ["3D Printing", "Sustainability", "Materials"]
 };
 
 export default post;
