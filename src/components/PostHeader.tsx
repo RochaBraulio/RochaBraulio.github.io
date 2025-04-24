@@ -4,7 +4,6 @@ import { Badge } from '@/components/ui/badge';
 
 interface PostHeaderProps {
   title: string;
-  author: string;
   date: string;
   tags: string[];
   coverImage: string;
@@ -12,7 +11,6 @@ interface PostHeaderProps {
 
 export const PostHeader: React.FC<PostHeaderProps> = ({ 
   title, 
-  author, 
   date, 
   tags, 
   coverImage 
@@ -40,8 +38,6 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
             {title}
           </h1>
           <div className="flex flex-wrap items-center gap-3 text-base text-muted-foreground font-light">
-            <span>{author}</span>
-            <span>·</span>
             <span>{formattedDate}</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-2">

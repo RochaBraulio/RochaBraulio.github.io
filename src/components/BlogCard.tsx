@@ -12,7 +12,7 @@ interface BlogCardProps {
 }
 
 export function BlogCard({ post, featured = false }: BlogCardProps) {
-  const { id, title, date, excerpt, tags, views, coverImage } = post;
+  const { id, title, date, excerpt, tags, coverImage } = post;
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -41,16 +41,13 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
             <p className="text-muted-foreground font-light leading-relaxed line-clamp-3">{excerpt}</p>
           </CardContent>
           
-          <CardFooter className="p-0 flex flex-wrap items-center justify-between gap-4">
+          <CardFooter className="p-0">
             <div className="flex flex-wrap gap-2">
               {tags.map(tag => (
                 <Badge key={tag} variant="secondary" className="rounded-full px-4 py-1 text-sm font-light">
                   {tag}
                 </Badge>
               ))}
-            </div>
-            <div className="text-xs text-muted-foreground font-light">
-              {views.toLocaleString()} {views === 1 ? 'view' : 'views'}
             </div>
           </CardFooter>
         </div>

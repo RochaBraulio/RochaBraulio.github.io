@@ -6,23 +6,17 @@ export interface BlogPost {
   id: string;
   title: string;
   date: string;
-  author: string;
   excerpt: string;
   content: string;
   coverImage: string;
   tags: string[];
-  views: number;
-  components?: Record<string, React.ComponentType<any>>; // Add support for MDX components
+  components?: Record<string, React.ComponentType<any>>;
 }
 
 export const blogPosts = allPosts;
 
 export const getPostById = (id: string): BlogPost | undefined => {
   return blogPosts.find(post => post.id === id);
-};
-
-export const getPopularPosts = (): BlogPost[] => {
-  return [...blogPosts].sort((a, b) => b.views - a.views).slice(0, 3);
 };
 
 export const getRecentPosts = (): BlogPost[] => {
@@ -41,11 +35,4 @@ export const getCategories = (): { name: string; count: number }[] => {
   });
   
   return Array.from(categoryMap.entries()).map(([name, count]) => ({ name, count }));
-};
-
-export const trackPageView = (postId: string): void => {
-  const post = blogPosts.find(p => p.id === postId);
-  if (post) {
-    post.views += 1;
-  }
 };
